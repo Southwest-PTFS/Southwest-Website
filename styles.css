@@ -1,0 +1,736 @@
+@font-face {
+  font-family: 'Southwest Sans Regular';
+  src: url('/fonts/SouthwestSans-Regular.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Southwest Sans Bold';
+  src: url('/fonts/SouthwestSans-Bold.otf') format('opentype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Southwest Sans Regular', sans-serif;
+  color: #333;
+  line-height: 1.6;
+  background-color: #f9fafb;
+}
+
+/* Utility Classes */
+.font-swabold { font-family: 'Southwest Sans Bold', sans-serif; }
+.font-swaregular { font-family: 'Southwest Sans Regular', sans-serif; }
+.text-center { text-align: center; }
+.bg-light { background-color: #f3f4f6; }
+
+/* Container */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Navigation */
+/* Navigation */
+.navbar {
+  background-color: #1e40af;
+  padding: 15px 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.navbar .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  height: 50px;
+  width: auto;
+  transition: transform 0.3s ease;
+}
+
+.logo:hover {
+  transform: scale(1.05);
+}
+
+.nav-menu {
+  display: flex;
+  align-items: center;
+}
+
+.nav-menu a, .nav-menu span {
+  color: white;
+  text-decoration: none;
+  margin-left: 30px;
+  font-size: 1.1rem;
+  font-family: 'Southwest Sans Bold', sans-serif;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.nav-menu a:hover {
+  color: #fbbf24;
+}
+
+.nav-menu a::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -4px;
+  left: 0;
+  background-color: #fbbf24;
+  transition: width 0.3s ease;
+}
+
+.nav-menu a:hover::after {
+  width: 100%;
+}
+
+.nav-menu span {
+  font-size: 1rem;
+  color: #fbbf24;
+}
+
+/* Responsive Navbar */
+@media (max-width: 768px) {
+  .nav-menu {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .nav-menu a, .nav-menu span {
+    margin-left: 15px;
+    font-size: 1rem;
+  }
+}
+/* Hero Section */
+.hero {
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('images/banners/image7.png') no-repeat center center/cover;
+  height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: white;
+}
+
+.hero-content {
+  animation: fadeIn 1.5s ease-in-out;
+}
+
+.hero h1 {
+  font-family: 'Southwest Sans Bold', sans-serif;
+  font-size: 3rem;
+  margin-bottom: 10px;
+}
+
+.heart-emblem {
+  width: 60px;
+  margin: 10px 0;
+}
+
+.hero p {
+  font-size: 1.3rem;
+  max-width: 600px;
+  margin: 0 auto 20px;
+}
+
+.cta-button {
+  display: inline-block;
+  padding: 12px 30px;
+  background-color: #fbbf24;
+  color: #1e40af;
+  text-decoration: none;
+  font-family: 'Southwest Sans Bold', sans-serif;
+  border-radius: 25px;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.cta-button:hover {
+  transform: scale(1.05);
+  background-color: #f59e0b;
+}
+
+/* Search Section */
+.search-section {
+  padding: 40px 0;
+  background-color: #fff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.search-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-family: 'Southwest Sans Bold', sans-serif;
+  color: #1e40af;
+  margin-bottom: 5px;
+}
+
+.form-group input {
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 200px;
+  transition: border-color 0.3s ease;
+}
+
+.form-group input:focus {
+  border-color: #1e40af;
+  outline: none;
+}
+
+.search-button {
+  padding: 12px 30px;
+  background-color: #fbbf24;
+  color: #1e40af;
+  border: none;
+  border-radius: 25px;
+  font-family: 'Southwest Sans Bold', sans-serif;
+  cursor: pointer;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.search-button:hover {
+  transform: scale(1.05);
+  background-color: #f59e0b;
+}
+
+/* Flights Section */
+.flights-section {
+  padding: 60px 0;
+  background-color: #fff;
+}
+
+.flights-section h2 {
+  font-family: 'Southwest Sans Bold', sans-serif;
+  font-size: 2.5rem;
+  text-align: center;
+  margin-bottom: 40px;
+  color: #1e40af;
+}
+
+.flights-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+}
+
+.flight-card {
+  background-color: #f3f4f6;
+  padding: 20px;
+  border-radius: 15px;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.flight-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.flight-card h3 {
+  font-family: 'Southwest Sans Bold', sans-serif;
+  font-size: 1.5rem;
+  color: #1e40af;
+  margin-bottom: 10px;
+}
+
+.flight-card p {
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 15px;
+}
+
+.select-button, .book-button {
+  padding: 10px 25px;
+  background-color: #1e40af;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  font-family: 'Southwest Sans Bold', sans-serif;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.select-button:hover, .book-button:hover {
+  background-color: #3b82f6;
+  transform: scale(1.05);
+}
+
+/* Check-in Section */
+.checkin-section {
+  padding: 60px 0;
+  background-color: #fff;
+  text-align: center;
+}
+
+.checkin-section h1 {
+  font-family: 'Southwest Sans Bold', sans-serif;
+  font-size: 3rem;
+  color: #1e40af;
+  margin-bottom: 30px;
+}
+
+.checkin-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.checkin-button {
+  padding: 12px 30px;
+  background-color: #fbbf24;
+  color: #1e40af;
+  border: none;
+  border-radius: 25px;
+  font-family: 'Southwest Sans Bold', sans-serif;
+  cursor: pointer;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.checkin-button:hover {
+  transform: scale(1.05);
+  background-color: #f59e0b;
+}
+
+/* Boarding Pass */
+.boarding-pass {
+  background-color: #f3f4f6;
+  padding: 20px;
+  border-radius: 15px;
+  margin-top: 30px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  animation: slideIn 0.3s ease-out;
+  text-align: center;
+}
+
+.boarding-pass h2 {
+  font-family: 'Southwest Sans Bold', sans-serif;
+  font-size: 2rem;
+  color: #1e40af;
+  margin-bottom: 20px;
+}
+
+.boarding-pass img {
+  max-width: 100%;
+  border: 2px solid #1e40af;
+  border-radius: 10px;
+}
+
+.download-button {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 10px 25px;
+  background-color: #1e40af;
+  color: white;
+  text-decoration: none;
+  border-radius: 20px;
+  font-family: 'Southwest Sans Bold', sans-serif;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.download-button:hover {
+  background-color: #3b82f6;
+  transform: scale(1.05);
+}
+
+/* Loading Animation */
+.loading {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 200;
+}
+
+.heart-spinner {
+  width: 50px;
+  height: 50px;
+  background: #fbbf24;
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+  animation: spin 1s infinite linear;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Modal */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 200;
+}
+
+.modal-content {
+  background-color: #fff;
+  margin: 15% auto;
+  padding: 30px;
+  border-radius: 15px;
+  width: 90%;
+  max-width: 500px;
+  text-align: center;
+  animation: slideIn 0.3s ease-out;
+}
+
+.close-button {
+  float: right;
+  font-size: 1.5rem;
+  color: #666;
+  cursor: pointer;
+}
+
+.close-button:hover {
+  color: #1e40af;
+}
+
+.modal-content h2 {
+  font-family: 'Southwest Sans Bold', sans-serif;
+  font-size: 2rem;
+  color: #1e40af;
+  margin-bottom: 20px;
+}
+
+#booking-details p {
+  font-size: 1.1rem;
+  margin: 10px 0;
+}
+
+/* About Section */
+.about-section {
+  padding: 60px 0;
+  background-color: #e5e7eb;
+  text-align: center;
+}
+
+.about-section h2 {
+  font-family: 'Southwest Sans Bold', sans-serif;
+  font-size: 2.5rem;
+  color: #1e40af;
+  margin-bottom: 20px;
+}
+
+.about-section p {
+  max-width: 800px;
+  margin: 0 auto;
+  font-size: 1.1rem;
+  color: #444;
+}
+
+/* Footer */
+.footer {
+  background-color: #1e40af;
+  color: white;
+  text-align: center;
+  padding: 20px 0;
+  font-size: 0.9rem;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .nav-menu a, .nav-menu span {
+    margin-left: 15px;
+    font-size: 1rem;
+  }
+
+  .hero h1 {
+    font-size: 2rem;
+  }
+
+  .hero p {
+    font-size: 1.1rem;
+  }
+
+  .flights-section h2, .checkin-section h1, .about-section h2 {
+    font-size: 2rem;
+  }
+
+  .form-group input {
+    width: 100%;
+  }
+
+  .search-form {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .boarding-pass h2 {
+    font-size: 1.5rem;
+  }
+}/* Regulations Section */
+.regulations-section {
+  padding: 60px 0;
+  background-color: #fff;
+  text-align: center;
+}
+
+.regulations-section h1 {
+  font-family: 'Southwest Sans Bold', sans-serif;
+  font-size: 3rem;
+  color: #1e40af;
+  margin-bottom: 20px;
+}
+
+.regulations-section .intro {
+  font-size: 1.3rem;
+  color: #444;
+  margin-bottom: 40px;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.rules-list {
+  list-style-position: inside;
+  text-align: left;
+  max-width: 800px;
+  margin: 0 auto;
+  font-size: 1.1rem;
+  color: #333;
+  line-height: 1.8;
+}
+
+.rules-list li {
+  margin-bottom: 15px;
+}
+
+.rules-list li::marker {
+  font-family: 'Southwest Sans Bold', sans-serif;
+  color: #1e40af;
+}
+/* Careers Section */
+.careers-section {
+  padding: 60px 0;
+  background-color: #fff;
+  text-align: center;
+}
+
+.careers-section h1 {
+  font-family: 'Southwest Sans Bold', sans-serif;
+  font-size: 3rem;
+  color: #1e40af;
+  margin-bottom: 20px;
+}
+
+.careers-section .intro {
+  font-size: 1.3rem;
+  color: #444;
+  margin-bottom: 20px;
+}
+
+.careers-section p {
+  font-size: 1.1rem;
+  color: #444;
+  max-width: 800px;
+  margin: 0 auto 20px;
+}
+
+.careers-section .cta-button {
+  margin-top: 20px;
+}
+
+/* User Profile */
+.user-profile {
+  margin-bottom: 30px;
+}
+
+.user-avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 3px solid #1e40af;
+  margin-bottom: 10px;
+}
+
+.user-profile p {
+  font-family: 'Southwest Sans Bold', sans-serif;
+  font-size: 1.2rem;
+  color: #1e40af;
+}
+/* Bookings Section */
+.bookings-section {
+  padding: 60px 0;
+  background-color: #fff;
+  text-align: center;
+}
+
+.bookings-section h2 {
+  font-family: 'Southwest Sans Bold', sans-serif;
+  font-size: 2.5rem;
+  color: #1e40af;
+  margin-bottom: 30px;
+}
+
+.bookings-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.booking-card {
+  background-color: #f3f4f6;
+  border-radius: 15px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.booking-card:hover {
+  transform: translateY(-5px);
+}
+
+.booking-card h3 {
+  font-family: 'Southwest Sans Bold', sans-serif;
+  font-size: 1.5rem;
+  color: #1e40af;
+  margin-bottom: 10px;
+}
+
+.booking-card p {
+  font-size: 1rem;
+  color: #444;
+  line-height: 1.6;
+  margin-bottom: 10px;
+}
+/* User Dropdown */
+.user-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.user-dropdown .username {
+  color: #fff;
+  font-family: 'Southwest Sans Bold', sans-serif;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.user-dropdown .dropdown-content {
+  display: none;
+  position: absolute;
+  right: 0;
+  background-color: #fff;
+  min-width: 150px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  z-index: 1;
+}
+
+.user-dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.user-dropdown .dropdown-content a {
+  color: #1e40af;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  font-family: 'Southwest Sans', sans-serif;
+  font-size: 0.9rem;
+}
+
+.user-dropdown .dropdown-content a:hover {
+  background-color: #f3f4f6;
+  border-radius: 8px;
+}
+/* Bookings Section */
+.bookings-section {
+  padding: 60px 0;
+  background-color: #fff;
+  text-align: center;
+}
+
+.bookings-section h2 {
+  font-family: 'Southwest Sans Bold', sans-serif;
+  font-size: 2.5rem;
+  color: #1e40af;
+  margin-bottom: 30px;
+}
+
+.bookings-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.booking-card {
+  background-color: #f3f4f6;
+  border-radius: 15px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.booking-card:hover {
+  transform: translateY(-5px);
+}
+
+.booking-card h3 {
+  font-family: 'Southwest Sans Bold', sans-serif;
+  font-size: 1.5rem;
+  color: #1e40af;
+  margin-bottom: 10px;
+}
+
+.booking-card p {
+  font-size: 1rem;
+  color: #444;
+  line-height: 1.6;
+  margin-bottom: 10px;
+}

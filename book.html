@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Southwest Airlines PTFS - Book a Flight</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <!-- Navigation -->
+  <header class="navbar">
+    <div class="container">
+      <img src="images/branding/banner.png" alt="Southwest Airlines PTFS Logo" class="logo" />
+      <nav class="nav-menu">
+        <a href="https://discord.gg/ZGGu6fTrxE" target="_blank">Join</a>
+        <a href="/index.html">Home</a>
+        <a href="/book.html">Book</a>
+        <a href="/checkin.html">Check In</a>
+        <a href="/contact.html">Contact</a>
+        <a href="/careers.html">Careers</a>
+        <a href="/regulations.html">Regulations</a>
+        <span id="auth-status">
+          <a href="https://discord.com/oauth2/authorize?client_id=780288804836868118&response_type=code&redirect_uri=https%3A%2F%2Fapi.awdevsoftware.org%2Fauth%2Fdiscord%2Fcallback&scope=identify" id="login-link">Login with Discord</a>
+          <span id="user-info" style="display: none;"></span>
+          <a href="#" id="logout-link" style="display: none;">Logout</a>
+        </span>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Book Your Flight</h1>
+      <img src="images/branding/emblem.png" alt="Heart Emblem" class="heart-emblem" />
+      <p>Fly with Southwest PTFS—affordable, friendly, and fun!</p>
+    </div>
+  </section>
+
+  <!-- Flight Search Form -->
+  <section class="search-section">
+    <div class="container">
+      <form id="flight-search-form" class="search-form">
+        <div class="form-group">
+          <label for="from">From</label>
+          <input type="text" id="from" placeholder="e.g., KDTW" required />
+        </div>
+        <div class="form-group">
+          <label for="to">To</label>
+          <input type="text" id="to" placeholder="e.g., KPHX" required />
+        </div>
+        <div class="form-group">
+          <label for="date">Date</label>
+          <input type="date" id="date" required />
+        </div>
+        <button type="submit" class="search-button">Search Flights</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Flights Section -->
+  <section id="flights" class="flights-section">
+    <div class="container">
+      <h2>Available Flights</h2>
+      <div class="flights-grid" id="flights-grid"></div>
+    </div>
+  </section>
+
+  <!-- Booking Modal -->
+  <div id="booking-modal" class="modal">
+    <div class="modal-content">
+      <span class="close-button">&times;</span>
+      <h2>Confirm Your Booking</h2>
+      <div id="booking-details"></div>
+      <button id="confirm-booking" class="book-button">Confirm Booking</button>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>© 2025 Southwest Airlines PTFS. Not affiliated with Southwest Airlines.</p>
+  </footer>
+
+  <script src="/scripts/auth.js"></script>
+  <script src="/scripts/booking.js"></script>
+
+</body>
+</html>

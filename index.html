@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Southwest Airlines PTFS</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="navbar">
+    <div class="container">
+      <a href="/index.html">
+        <img src="images/branding/banner.png" alt="Southwest Airlines PTFS Logo" class="logo" />
+      </a>
+      <nav class="nav-menu">
+        <a href="https://discord.gg/ZGGu6fTrxE" target="_blank">Join</a>
+        <a href="/index.html">Home</a>
+        <a href="/book.html">Book</a>
+        <a href="/checkin.html">Check In</a>
+        <a href="/contact.html">Contact</a>
+        <a href="/careers.html">Careers</a>
+        <a href="/regulations.html">Regulations</a>
+        <span id="auth-status">
+          <a href="https://discord.com/oauth2/authorize?client_id=780288804836868118&response_type=code&redirect_uri=https%3A%2F%2Fapi.awdevsoftware.org%2Fauth%2Fdiscord%2Fcallback&scope=identify" id="login-link">Login with Discord</a>
+          <span id="user-info" style="display: none;"></span>
+          <a href="#" id="logout-link" style="display: none;">Logout</a>
+        </span>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div id="hero-bg" class="hero-bg"></div>
+    <div class="hero-content">
+      <h1>Welcome to Southwest Airlines PTFS</h1>
+      <img src="images/branding/emblem.png" alt="Heart Emblem" class="heart-emblem" />
+      <p>Connecting people to what matters with friendly, reliable, and affordable air travel.</p>
+      <a href="#routes" class="cta-button">Explore Flights</a>
+    </div>
+  </section>
+
+  <section id="about" class="about-section">
+    <div class="container">
+      <h2>About Us</h2>
+      <p>
+        Southwest Airlines PTFS is your go-to low-cost carrier, offering a vast network across the U.S.
+        With a modern fleet of Boeing 737s and a commitment to top-tier service, we make travel simple, affordable, and enjoyable.
+      </p>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p>© 2025 Southwest Airlines PTFS. Not affiliated with Southwest Airlines.</p>
+  </footer>
+
+  <script src="/scripts/auth.js"></script>
+  <script src="/scripts/hero.js"></script>
+</body>
+</html>

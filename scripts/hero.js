@@ -1,6 +1,6 @@
 // document.addEventListener("DOMContentLoaded", () => {
 //     const heroBg = document.getElementById("hero-bg");
-//     const BACKEND_URL = 'https://api.awdevsoftware.org';
+//     const BACKEND_URL = 'http://localhost:3000';
   
 //     if (heroBg) {
 //       fetch(`${BACKEND_URL}/background`)
@@ -11,7 +11,7 @@
 //           return response.json();
 //         })
 //         .then(data => {
-//           const imageUrl = `${BACKEND_URL}${data.imageUrl}`;
+//           const imageUrl = `${BACKEND_URL}${data.path}`;
 //           // Preload the image to ensure it loads
 //           const img = new Image();
 //           img.src = imageUrl;

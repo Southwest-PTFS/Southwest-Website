@@ -1,4 +1,4 @@
-const BACKEND_URL = 'https://api.awdevsoftware.org';
+const BACKEND_URL = 'http://localhost:3000';
 
 async function checkAuth() {
   try {

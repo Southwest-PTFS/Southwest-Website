@@ -117,17 +117,34 @@ body {
   }
 }
 /* Hero Section */
+/* Hero Section */
 .hero {
-  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('images/banners/Image7.png') no-repeat center center/cover;
+  position: relative; /* Establishes stacking context */
   height: 70vh;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
   color: white;
+  overflow: hidden; /* Prevents blurred edges from spilling out */
+}
+
+.hero-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('images/banners/image7.png') no-repeat center center/cover;
+  filter: blur(2px);
+  z-index: 0;
+  transition: background-image 1s ease-in-out, opacity 3s ease-in-out, filter 0.7s ease-in-out;
+  opacity: 1;
 }
 
 .hero-content {
+  position: relative; /* Keeps content above background */
+  z-index: 1; /* Ensures content is on top */
   animation: fadeIn 1.5s ease-in-out;
 }
 
@@ -146,6 +163,23 @@ body {
   font-size: 1.3rem;
   max-width: 600px;
   margin: 0 auto 20px;
+}
+
+/* Optional CTA Button (if you want to add it back) */
+.cta-button {
+  display: inline-block;
+  padding: 12px 30px;
+  background-color: #fbbf24;
+  color: #1e40af;
+  text-decoration: none;
+  font-family: 'Southwest Sans Bold', sans-serif;
+  border-radius: 25px;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.cta-button:hover {
+  transform: scale(1.05);
+  background-color: #f59e0b;
 }
 
 .cta-button {

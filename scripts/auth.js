@@ -17,7 +17,7 @@ async function checkAuth() {
       loginLink.style.display = 'none';
       logoutLink.style.display = 'inline';
       userInfo.style.display = 'inline';
-      userInfo.textContent = `Welcome, ${data.user.username}`;
+      userInfo.textContent = `Welcome, ${data.user.username}#${data.user.discriminator}`;
     } else {
       loginLink.style.display = 'inline';
       logoutLink.style.display = 'none';

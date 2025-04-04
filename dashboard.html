@@ -22,8 +22,9 @@
         <a href="/careers.html">Careers</a>
         <a href="/regulations.html">Regulations</a>
         <span id="auth-status">
-          <a href="https://discord.com/oauth2/authorize?client_id=780288804836868118&redirect_uri=https%3A%2F%2Fapi.awdevsoftware.org%2Fauth%2Fdiscord%2Fcallback&response_type=code&scope=identify" id="login-link">Login with Discord</a>
+          <a href="#" id="login-link">Login with Discord</a>
           <div class="user-dropdown" id="user-dropdown" style="display: none;">
+            <img id="user-pfp" src="" alt="User Profile Picture" class="user-pfp" />
             <span class="username" id="user-info"></span>
             <div class="dropdown-content">
               <a href="/dashboard.html">Dashboard</a>
@@ -55,6 +56,17 @@
         <p id="no-flights" class="no-data" style="display: none;">No flights available to check in at this time.</p>
       </div>
 
+      <!-- Manage Bookings -->
+      <div class="dashboard-card manage-bookings-section">
+        <h2 class="font-swabold">Manage Bookings</h2>
+        <p>View or cancel your bookings below. To book a new flight, <a href="/book.html">click here</a>.</p>
+        <div id="loading-manage-flights" class="loading" style="display: none;">
+          <div class="heart-spinner"></div>
+        </div>
+        <div class="bookings-grid" id="manage-flights-grid"></div>
+        <p id="no-manage-flights" class="no-data" style="display: none;">You have no bookings to manage.</p>
+      </div>
+
       <!-- Rapid Rewards Points -->
       <div class="dashboard-card rewards-section">
         <h2 class="font-swabold">Rapid Rewards Points</h2>
@@ -69,9 +81,7 @@
   <footer class="footer">
     <p>© 2025 Southwest Airlines PTFS. Not affiliated with Southwest Airlines.</p>
   </footer>
-<script src="/scripts/auth.js"></script>
-  <script src="/scripts/dashboard.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
 </body>
 </html>

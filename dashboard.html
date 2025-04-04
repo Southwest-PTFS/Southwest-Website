@@ -48,6 +48,9 @@
       <!-- Flights Available to Check In -->
       <div class="dashboard-card bookings-section">
         <h2 class="font-swabold">Flights Available to Check In</h2>
+        <div id="loading-flights" class="loading" style="display: none;">
+          <div class="heart-spinner"></div>
+        </div>
         <div class="bookings-grid" id="checkin-flights-grid"></div>
         <p id="no-flights" class="no-data" style="display: none;">No flights available to check in at this time.</p>
       </div>
@@ -62,8 +65,11 @@
       </div>
     </div>
   </section>
-  <script src="/scripts/dashboard.js"></script>
+
   <footer class="footer">
     <p>© 2025 Southwest Airlines PTFS. Not affiliated with Southwest Airlines.</p>
   </footer>
 
+
+</body>
+</html>

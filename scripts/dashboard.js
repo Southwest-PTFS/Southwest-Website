@@ -1,8 +1,10 @@
-
 async function checkAuth() {
   console.log('Checking authentication status...');
   try {
-    const response = await fetch(`${BACKEND_URL}/auth/user`, { credentials: 'include', headers: { 'Accept': 'application/json' } });
+    const response = await fetch(`${BACKEND_URL}/auth/user`, { 
+      credentials: 'include', 
+      headers: { 'Accept': 'application/json' }
+    });
     console.log('Auth response status:', response.status);
     if (response.ok) {
       const data = await response.json();
@@ -15,7 +17,7 @@ async function checkAuth() {
       document.getElementById('user-greeting').textContent = `Hello, ${data.user.username}#${data.user.discriminator}!`;
       return data;
     } else {
-      console.log('User not authenticated');
+      console.log('User not authenticated, status:', response.status);
       document.getElementById('login-link').style.display = 'inline';
       document.getElementById('user-dropdown').style.display = 'none';
       Swal.fire({
@@ -29,7 +31,7 @@ async function checkAuth() {
       return null;
     }
   } catch (error) {
-    console.error('Error checking auth:', error);
+    console.error('Error checking auth:', error.message);
     document.getElementById('login-link').style.display = 'inline';
     document.getElementById('user-dropdown').style.display = 'none';
     return null;
@@ -41,34 +43,62 @@ async function loadBookings() {
   const noFlightsMessage = document.getElementById('no-flights');
   const loadingFlights = document.getElementById('loading-flights');
   
-  console.log('Loading bookings...');
-  loadingFlights.style.display = 'block'; // Show loading spinner
-  grid.innerHTML = ''; // Clear previous content
+  console.log('Fetching bookings from:', `${BACKEND_URL}/bookings`);
+  loadingFlights.style.display = 'block';
+  grid.innerHTML = '';
   noFlightsMessage.style.display = 'none';
 
   try {
-    const response = await fetch(`${BACKEND_URL}/bookings`, { credentials: 'include' });
-    console.log('Bookings response status:', response.status);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch bookings: ${response.status}`);
+    // Fetch bookings
+    const bookingsResponse = await fetch(`${BACKEND_URL}/bookings`, { 
+      method: 'GET',
+      credentials: 'include',
+      headers: { 'Accept': 'application/json' }
+    });
+    console.log('Bookings fetch status:', bookingsResponse.status);
+    if (!bookingsResponse.ok) {
+      throw new Error(`Bookings fetch failed with status ${bookingsResponse.status}`);
     }
-    const bookings = await response.json();
-    console.log('Bookings data:', bookings);
+    const bookings = await bookingsResponse.json();
+    console.log('Raw bookings response:', bookings);
 
-    // Filter check-in ready flights
-    const checkinReadyBookings = bookings.filter(booking => {
+    // Fetch flights
+    const flightsResponse = await fetch(`${BACKEND_URL}/flights`, { 
+      method: 'GET',
+      credentials: 'include',
+      headers: { 'Accept': 'application/json' }
+    });
+    console.log('Flights fetch status:', flightsResponse.status);
+    if (!flightsResponse.ok) {
+      throw new Error(`Flights fetch failed with status ${flightsResponse.status}`);
+    }
+    const flights = await flightsResponse.json();
+    console.log('Raw flights response:', flights);
+
+    // Merge bookings with flight data
+    const enrichedBookings = bookings.map(booking => {
+      const flight = flights.find(f => f.id === booking.flightId) || {};
+      return { ...booking, flight };
+    });
+    console.log('Enriched bookings:', enrichedBookings);
+
+    // Filter for check-in ready bookings
+    const checkinReadyBookings = enrichedBookings.filter(booking => {
       const departureTime = new Date(booking.flight.departure);
       const now = new Date();
       const timeDiff = departureTime - now;
+      // Show flights departing within 24 hours that haven't been checked in
       return timeDiff > 0 && timeDiff <= 24 * 60 * 60 * 1000 && !booking.boardingPosition;
     });
     console.log('Check-in ready bookings:', checkinReadyBookings);
 
     if (checkinReadyBookings.length === 0) {
+      console.log('No check-in ready bookings');
       noFlightsMessage.style.display = 'block';
     } else {
-      checkinReadyBookings.forEach(booking => {
-        const flight = booking.flight;
+      console.log(`Rendering ${checkinReadyBookings.length} bookings`);
+      checkinReadyBookings.forEach((booking, index) => {
+        const flight = booking.flight || { id: 'N/A', from: 'Unknown', to: 'Unknown', departure: 'N/A', aircraft: 'N/A' };
         const card = document.createElement('div');
         card.className = 'booking-card';
         card.innerHTML = `
@@ -77,17 +107,20 @@ async function loadBookings() {
           <p><strong>To:</strong> ${flight.to}</p>
           <p><strong>Departure:</strong> ${new Date(flight.departure).toLocaleString()}</p>
           <p><strong>Aircraft:</strong> ${flight.aircraft}</p>
+          <p><strong>Confirmation:</strong> ${booking.confirmationNumber}</p>
           <a href="/checkin.html?confirmationNumber=${booking.confirmationNumber}" class="select-button">Check In Now</a>
         `;
+        console.log(`Appending booking card ${index + 1}:`, card.outerHTML);
         grid.appendChild(card);
       });
+      console.log('Bookings grid after render:', grid.innerHTML);
     }
   } catch (error) {
-    console.error('Error loading bookings:', error);
-    noFlightsMessage.textContent = 'Error loading flights. Please try again later.';
+    console.error('Error fetching bookings:', error.message);
+    noFlightsMessage.textContent = `Error loading flights: ${error.message}. Please try again later.`;
     noFlightsMessage.style.display = 'block';
   } finally {
-    loadingFlights.style.display = 'none'; // Hide loading spinner
+    loadingFlights.style.display = 'none';
   }
 }
 

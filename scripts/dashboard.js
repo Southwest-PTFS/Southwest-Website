@@ -95,7 +95,7 @@ async function loadRewardsPoints() {
     document.getElementById('rewards-points').textContent = data.points.toLocaleString();
   } catch (error) {
     console.error('Error loading rewards points:', error);
-    document.getElementById('rewards-points').textContent = '0'; // Fallback value
+    document.getElementById('rewards-points').textContent = 'Unknown'; 
   }
 }
 

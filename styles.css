@@ -39,7 +39,6 @@ body {
 }
 
 /* Navigation */
-/* Navigation */
 .navbar {
   background-color: #1e40af;
   padding: 15px 0;
@@ -104,6 +103,48 @@ body {
   color: #fbbf24;
 }
 
+/* User Dropdown */
+.user-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.user-dropdown .username {
+  color: #fff;
+  font-family: 'Southwest Sans Bold', sans-serif;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.user-dropdown .dropdown-content {
+  display: none;
+  position: absolute;
+  right: 0;
+  background-color: #fff;
+  min-width: 150px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  z-index: 1;
+}
+
+.user-dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.user-dropdown .dropdown-content a {
+  color: #1e40af;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  font-family: 'Southwest Sans Regular', sans-serif;
+  font-size: 0.9rem;
+}
+
+.user-dropdown .dropdown-content a:hover {
+  background-color: #f3f4f6;
+  border-radius: 8px;
+}
+
 /* Responsive Navbar */
 @media (max-width: 768px) {
   .nav-menu {
@@ -116,6 +157,7 @@ body {
     font-size: 1rem;
   }
 }
+
 /* Hero Section */
 .hero {
   background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('images/banners/Image7.png') no-repeat center center/cover;
@@ -465,49 +507,7 @@ body {
   font-size: 0.9rem;
 }
 
-/* Animations */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes slideIn {
-  from { opacity: 0; transform: translateY(-20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-  .nav-menu a, .nav-menu span {
-    margin-left: 15px;
-    font-size: 1rem;
-  }
-
-  .hero h1 {
-    font-size: 2rem;
-  }
-
-  .hero p {
-    font-size: 1.1rem;
-  }
-
-  .flights-section h2, .checkin-section h1, .about-section h2 {
-    font-size: 2rem;
-  }
-
-  .form-group input {
-    width: 100%;
-  }
-
-  .search-form {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .boarding-pass h2 {
-    font-size: 1.5rem;
-  }
-}/* Regulations Section */
+/* Regulations Section */
 .regulations-section {
   padding: 60px 0;
   background-color: #fff;
@@ -548,6 +548,7 @@ body {
   font-family: 'Southwest Sans Bold', sans-serif;
   color: #1e40af;
 }
+
 /* Careers Section */
 .careers-section {
   padding: 60px 0;
@@ -581,22 +582,23 @@ body {
 
 /* User Profile */
 .user-profile {
-  margin-bottom: 30px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
 }
 
 .user-avatar {
-  width: 100px;
-  height: 100px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
-  border: 3px solid #1e40af;
-  margin-bottom: 10px;
+  border: 2px solid #fbbf24;
 }
 
 .user-profile p {
-  font-family: 'Southwest Sans Bold', sans-serif;
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   color: #1e40af;
 }
+
 /* Bookings Section */
 .bookings-section {
   padding: 60px 0;
@@ -645,95 +647,7 @@ body {
   line-height: 1.6;
   margin-bottom: 10px;
 }
-/* User Dropdown */
-.user-dropdown {
-  position: relative;
-  display: inline-block;
-}
 
-.user-dropdown .username {
-  color: #fff;
-  font-family: 'Southwest Sans Bold', sans-serif;
-  font-size: 1rem;
-  cursor: pointer;
-}
-
-.user-dropdown .dropdown-content {
-  display: none;
-  position: absolute;
-  right: 0;
-  background-color: #fff;
-  min-width: 150px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  border-radius: 8px;
-  z-index: 1;
-}
-
-.user-dropdown:hover .dropdown-content {
-  display: block;
-}
-
-.user-dropdown .dropdown-content a {
-  color: #1e40af;
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
-  font-family: 'Southwest Sans', sans-serif;
-  font-size: 0.9rem;
-}
-
-.user-dropdown .dropdown-content a:hover {
-  background-color: #f3f4f6;
-  border-radius: 8px;
-}
-/* Bookings Section */
-.bookings-section {
-  padding: 60px 0;
-  background-color: #fff;
-  text-align: center;
-}
-
-.bookings-section h2 {
-  font-family: 'Southwest Sans Bold', sans-serif;
-  font-size: 2.5rem;
-  color: #1e40af;
-  margin-bottom: 30px;
-}
-
-.bookings-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 20px;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.booking-card {
-  background-color: #f3f4f6;
-  border-radius: 15px;
-  padding: 20px;
-  text-align: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease;
-}
-
-.booking-card:hover {
-  transform: translateY(-5px);
-}
-
-.booking-card h3 {
-  font-family: 'Southwest Sans Bold', sans-serif;
-  font-size: 1.5rem;
-  color: #1e40af;
-  margin-bottom: 10px;
-}
-
-.booking-card p {
-  font-size: 1rem;
-  color: #444;
-  line-height: 1.6;
-  margin-bottom: 10px;
-}
 /* Dashboard Section */
 .dashboard-section {
   padding: 60px 0;
@@ -752,24 +666,6 @@ body {
 
 .dashboard-header h1 {
   font-size: 3rem;
-  color: #1e40af;
-}
-
-.user-profile {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-
-.user-avatar {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  border: 2px solid #fbbf24;
-}
-
-.user-profile p {
-  font-size: 1.5rem;
   color: #1e40af;
 }
 
@@ -826,8 +722,49 @@ body {
   color: #444;
 }
 
-/* Responsive Adjustments */
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive Design */
 @media (max-width: 768px) {
+  .nav-menu a, .nav-menu span {
+    margin-left: 15px;
+    font-size: 1rem;
+  }
+
+  .hero h1 {
+    font-size: 2rem;
+  }
+
+  .hero p {
+    font-size: 1.1rem;
+  }
+
+  .flights-section h2, .checkin-section h1, .about-section h2 {
+    font-size: 2rem;
+  }
+
+  .form-group input {
+    width: 100%;
+  }
+
+  .search-form {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .boarding-pass h2 {
+    font-size: 1.5rem;
+  }
+
   .dashboard-header {
     flex-direction: column;
     text-align: center;

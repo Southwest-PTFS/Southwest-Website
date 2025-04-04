@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Southwest Airlines PTFS - Dashboard</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+  <header class="navbar">
+    <div class="container">
+      <a href="/index.html">
+        <img src="/images/branding/banner.png" alt="Southwest Airlines PTFS Logo" class="logo" onerror="this.src='https://via.placeholder.com/150x50?text=Logo+Not+Found'; this.onerror=null;" />
+      </a>
+      <nav class="nav-menu">
+        <a href="https://discord.gg/ZGGu6fTrxE" target="_blank">Join</a>
+        <a href="/index.html">Home</a>
+        <a href="/book.html">Book</a>
+        <a href="/checkin.html">Check In</a>
+        <a href="/contact.html">Contact</a>
+        <a href="/careers.html">Careers</a>
+        <a href="/regulations.html">Regulations</a>
+        <span id="auth-status">
+          <a href="#" id="login-link">Login with Discord</a>
+          <div class="user-dropdown" id="user-dropdown" style="display: none;">
+            <span class="username" id="user-info"></span>
+            <div class="dropdown-content">
+              <a href="/dashboard.html">Dashboard</a>
+              <a href="#" id="logout-link">Logout</a>
+            </div>
+          </div>
+        </span>
+      </nav>
+    </div>
+  </header>
+
+  <section class="dashboard-section">
+    <div class="container">
+      <div class="dashboard-header">
+        <h1 class="font-swabold">Dashboard</h1>
+        <div class="user-profile" id="user-profile" style="display: none;">
+          <img id="user-avatar" src="" alt="User Avatar" class="user-avatar" />
+          <p class="font-swabold" id="user-greeting"></p>
+        </div>
+      </div>
+
+      <!-- Flights Available to Check In -->
+      <div class="dashboard-card bookings-section">
+        <h2 class="font-swabold">Flights Available to Check In</h2>
+        <div class="bookings-grid" id="checkin-flights-grid"></div>
+        <p id="no-flights" class="no-data" style="display: none;">No flights available to check in at this time.</p>
+      </div>
+
+      <!-- Rapid Rewards Points -->
+      <div class="dashboard-card rewards-section">
+        <h2 class="font-swabold">Rapid Rewards Points</h2>
+        <div class="rewards-display">
+          <span id="rewards-points" class="points-value">0</span>
+          <p>Points</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p>© 2025 Southwest Airlines PTFS. Not affiliated with Southwest Airlines.</p>
+  </footer>
+

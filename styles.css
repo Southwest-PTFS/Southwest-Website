@@ -734,3 +734,123 @@ body {
   line-height: 1.6;
   margin-bottom: 10px;
 }
+/* Dashboard Section */
+.dashboard-section {
+  padding: 60px 0;
+  background-color: #fff;
+  min-height: calc(100vh - 150px); /* Adjust for navbar and footer */
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.dashboard-header h1 {
+  font-size: 3rem;
+  color: #1e40af;
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.user-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 2px solid #fbbf24;
+}
+
+.user-profile p {
+  font-size: 1.5rem;
+  color: #1e40af;
+}
+
+/* Dashboard Cards */
+.dashboard-card {
+  background-color: #f3f4f6;
+  border-radius: 15px;
+  padding: 30px;
+  margin-bottom: 30px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-5px);
+}
+
+.dashboard-card h2 {
+  font-size: 2rem;
+  color: #1e40af;
+  margin-bottom: 20px;
+}
+
+.no-data {
+  font-size: 1.1rem;
+  color: #666;
+  margin-top: 20px;
+}
+
+/* Rewards Section */
+.rewards-section {
+  text-align: center;
+}
+
+.rewards-display {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.points-value {
+  font-family: 'Southwest Sans Bold', sans-serif;
+  font-size: 3rem;
+  color: #fbbf24;
+}
+
+.rewards-display p {
+  font-size: 1.2rem;
+  color: #444;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .dashboard-header {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .dashboard-header h1 {
+    font-size: 2.5rem;
+  }
+
+  .user-profile p {
+    font-size: 1.2rem;
+  }
+
+  .user-avatar {
+    width: 50px;
+    height: 50px;
+  }
+
+  .dashboard-card h2 {
+    font-size: 1.8rem;
+  }
+
+  .points-value {
+    font-size: 2.5rem;
+  }
+}

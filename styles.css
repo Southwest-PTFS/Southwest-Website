@@ -868,27 +868,34 @@ body {
     font-size: 2.5rem;
   }
 }
-/* User Dropdown */
 .user-dropdown {
   position: relative;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px; /* Space between PFP and username */
 }
 
-.user-dropdown .username {
-  color: #fff;
-  font-family: 'Southwest Sans Bold', sans-serif;
-  font-size: 1rem;
-  cursor: pointer;
+.user-pfp {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%; /* Circular PFP */
+  object-fit: cover;
+  border: 2px solid #1e40af; /* Optional: border to match theme */
 }
 
-.user-dropdown .dropdown-content {
+.username {
+  color: #fff; /* Adjust based on your navbar color */
+  font-weight: bold;
+}
+
+.dropdown-content {
   display: none;
   position: absolute;
+  top: 100%;
   right: 0;
   background-color: #fff;
-  min-width: 150px;
+  min-width: 160px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  border-radius: 8px;
   z-index: 1;
 }
 
@@ -896,16 +903,13 @@ body {
   display: block;
 }
 
-.user-dropdown .dropdown-content a {
+.dropdown-content a {
   color: #1e40af;
   padding: 12px 16px;
   text-decoration: none;
   display: block;
-  font-family: 'Southwest Sans Regular', sans-serif;
-  font-size: 0.9rem;
 }
 
-.user-dropdown .dropdown-content a:hover {
-  background-color: #f3f4f6;
-  border-radius: 8px;
+.dropdown-content a:hover {
+  background-color: #f1f1f1;
 }

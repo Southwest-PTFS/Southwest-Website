@@ -21,14 +21,18 @@
         <a href="/careers.html">Careers</a>
         <a href="/regulations.html">Regulations</a>
         <span id="auth-status">
-          <a href="https://discord.com/oauth2/authorize?client_id=780288804836868118&response_type=code&redirect_uri=https%3A%2F%2Fapi.awdevsoftware.org%2Fauth%2Fdiscord%2Fcallback&scope=identify" id="login-link">Login with Discord</a>
-          <span id="user-info" style="display: none;"></span>
-          <a href="#" id="logout-link" style="display: none;">Logout</a>
+          <a href="#" id="login-link">Login with Discord</a>
+          <div class="user-dropdown" id="user-dropdown" style="display: none;">
+            <span class="username" id="user-info"></span>
+            <div class="dropdown-content">
+              <a href="/dashboard.html">Dashboard</a>
+              <a href="#" id="logout-link">Logout</a>
+            </div>
+          </div>
         </span>
       </nav>
     </div>
   </header>
-
   <section class="careers-section">
     <div class="container">
       <h1>Join Our Team</h1>

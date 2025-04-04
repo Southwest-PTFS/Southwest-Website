@@ -10,7 +10,7 @@
   <header class="navbar">
     <div class="container">
       <a href="/index.html">
-        <img src="images/branding/banner.png" alt="Southwest Airlines PTFS Logo" class="logo" />
+        <img src="/images/branding/banner.png" alt="Southwest Airlines PTFS Logo" class="logo" onerror="this.src='https://via.placeholder.com/150x50?text=Logo+Not+Found'; this.onerror=null;" />
       </a>
       <nav class="nav-menu">
         <a href="https://discord.gg/ZGGu6fTrxE" target="_blank">Join</a>
@@ -21,9 +21,14 @@
         <a href="/careers.html">Careers</a>
         <a href="/regulations.html">Regulations</a>
         <span id="auth-status">
-          <a href="https://discord.com/oauth2/authorize?client_id=780288804836868118&response_type=code&redirect_uri=https%3A%2F%2Fapi.awdevsoftware.org%2Fauth%2Fdiscord%2Fcallback&scope=identify" id="login-link">Login with Discord</a>
-          <span id="user-info" style="display: none;"></span>
-          <a href="#" id="logout-link" style="display: none;">Logout</a>
+          <a href="#" id="login-link">Login with Discord</a>
+          <div class="user-dropdown" id="user-dropdown" style="display: none;">
+            <span class="username" id="user-info"></span>
+            <div class="dropdown-content">
+              <a href="/dashboard.html">Dashboard</a>
+              <a href="#" id="logout-link">Logout</a>
+            </div>
+          </div>
         </span>
       </nav>
     </div>
@@ -35,7 +40,7 @@
       <h1>Welcome to Southwest Airlines PTFS</h1>
       <img src="images/branding/emblem.png" alt="Heart Emblem" class="heart-emblem" />
       <p>Connecting people to what matters with friendly, reliable, and affordable air travel.</p>
-      <a href="/book.html" class="cta-button">Explore Flights</a>
+      <a href="/" class="cta-button">Explore Flights</a>
     </div>
   </section>
 
@@ -55,5 +60,7 @@
 
   <script src="/scripts/auth.js"></script>
   <script src="/scripts/hero.js"></script>
+  <script src="/scripts/dashboard.js"></script>
+
 </body>
 </html>

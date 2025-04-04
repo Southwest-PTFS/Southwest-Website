@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Southwest Airlines PTFS - Contact</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="navbar">
+    <div class="container">
+      <a href="/index.html">
+        <img src="/images/branding/banner.png" alt="Southwest Airlines PTFS Logo" class="logo" onerror="this.src='https://via.placeholder.com/150x50?text=Logo+Not+Found'; this.onerror=null;" />
+      </a>
+      <nav class="nav-menu">
+        <a href="https://discord.gg/ZGGu6fTrxE" target="_blank">Join</a>
+        <a href="/index.html">Home</a>
+        <a href="/book.html">Book</a>
+        <a href="/checkin.html">Check In</a>
+        <a href="/contact.html">Contact</a>
+        <a href="/careers.html">Careers</a>
+        <a href="/regulations.html">Regulations</a>
+        <span id="auth-status">
+          <a href="https://discord.com/oauth2/authorize?client_id=780288804836868118&response_type=code&redirect_uri=https%3A%2F%2Fapi.awdevsoftware.org%2Fauth%2Fdiscord%2Fcallback&scope=identify" id="login-link">Login with Discord</a>
+          <span id="user-info" style="display: none;"></span>
+          <a href="#" id="logout-link" style="display: none;">Logout</a>
+        </span>
+      </nav>
+    </div>
+  </header>
+
+  <section class="careers-section">
+    <div class="container">
+      <h1>Contact Us</h1>
+      <div class="user-profile" id="user-profile" style="display: none;">
+        <img id="user-avatar" src="" alt="User Avatar" class="user-avatar" />
+        <p id="user-greeting"></p>
+      </div>
+      <p class="intro">Need help or have questions?</p>
+      <p>Join our Discord community and open a support ticket in the <span><a href='https://discord.com/channels/1260437337679331458/1260667481505398886', target="_blank" id="suplink">#support</a></span> channel — we're here for you!</p>
+      <p>For official business inquiries, feel free to reach out via email at <span><a href="mailto:info@southwestptfs.com">info@southwestptfs.com</a></span>.</p>
+      <a href="https://discord.gg/ZGGu6fTrxE" target="_blank" class="cta-button">Join Our Discord</a>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p>© 2025 Southwest Airlines PTFS. Not affiliated with Southwest Airlines.</p>
+  </footer>
+
+  <script src="/scripts/auth.js"></script>
+</body>
+</html>

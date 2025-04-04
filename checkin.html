@@ -82,27 +82,7 @@
   <footer class="footer">
     <p>© 2025 Southwest Airlines PTFS. Not affiliated with Southwest Airlines.</p>
   </footer>
-  <script>
-      function getQueryParam(param) {
-        const urlParams = new URLSearchParams(window.location.search);
-        return urlParams.get(param);
-      }
-
-      document.addEventListener('DOMContentLoaded', async () => {
-        console.log('DOM loaded, checking auth');
-        const userData = await checkAuth();
-        if (userData) {
-          // Populate confirmation number from query parameter
-          const confirmationNumber = getQueryParam('confirmationNumber');
-          console.log('Confirmation number from URL:', confirmationNumber);
-          if (confirmationNumber) {
-            const confirmationInput = document.getElementById('confirmation');
-            confirmationInput.value = confirmationNumber;
-            console.log('Set confirmation input value to:', confirmationInput.value);
-          }
-        }
-      });
-  </script>
+  
   <script src="/scripts/auth.js"></script>
   <script src="/scripts/checkin.js"></script>
   <script src="/scripts/top.js"></script>

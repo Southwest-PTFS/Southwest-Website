@@ -8,32 +8,33 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
-  <header class="navbar">
-    <div class="container">
-      <a href="/index.html">
-        <img src="/images/branding/banner.png" alt="Southwest Airlines PTFS Logo" class="logo" onerror="this.src='https://via.placeholder.com/150x50?text=Logo+Not+Found'; this.onerror=null;" />
-      </a>
-      <nav class="nav-menu">
-        <a href="https://discord.gg/ZGGu6fTrxE" target="_blank">Join</a>
-        <a href="/index.html">Home</a>
-        <a href="/book.html">Book</a>
-        <a href="/checkin.html">Check In</a>
-        <a href="/contact.html">Contact</a>
-        <a href="/careers.html">Careers</a>
-        <a href="/regulations.html">Regulations</a>
-        <span id="auth-status">
-          <a href="#" id="login-link">Login with Discord</a>
-          <div class="user-dropdown" id="user-dropdown" style="display: none;">
-            <span class="username" id="user-info"></span>
-            <div class="dropdown-content">
-              <a href="/dashboard.html">Dashboard</a>
-              <a href="#" id="logout-link">Logout</a>
-            </div>
-          </div>
-        </span>
-      </nav>
-    </div>
-  </header>
+    <header class="navbar">
+        <div class="container">
+          <a href="/index.html">
+            <img src="/images/branding/banner.png" alt="Southwest Airlines PTFS Logo" class="logo" onerror="this.src='https://via.placeholder.com/150x50?text=Logo+Not+Found'; this.onerror=null;" />
+          </a>
+          <nav class="nav-menu">
+            <a href="https://discord.gg/ZGGu6fTrxE" target="_blank">Join</a>
+            <a href="/index.html">Home</a>
+            <a href="/book.html">Book</a>
+            <a href="/checkin.html">Check In</a>
+            <a href="/contact.html">Contact</a>
+            <a href="/careers.html">Careers</a>
+            <a href="/regulations.html">Regulations</a>
+            <span id="auth-status">
+              <a href="#" id="login-link">Login with Discord</a>
+              <div class="user-dropdown" id="user-dropdown" style="display: none;">
+                <img id="user-pfp" src="" alt="User Profile Picture" class="user-pfp" />
+                <span class="username" id="user-info"></span>
+                <div class="dropdown-content">
+                  <a href="/dashboard.html">Dashboard</a>
+                  <a href="#" id="logout-link">Logout</a>
+                </div>
+              </div>
+            </span>
+          </nav>
+        </div>
+      </header>
 
   <section class="dashboard-section">
     <div class="container">

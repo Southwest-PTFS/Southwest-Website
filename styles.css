@@ -913,3 +913,25 @@ body {
 .dropdown-content a:hover {
   background-color: #f1f1f1;
 }
+.manage-bookings-section {
+  margin-top: 20px;
+}
+.cancel-button {
+  background-color: #d33;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.cancel-button:hover {
+  background-color: #b00;
+}
+
+.booking-card .no-data {
+  color: #888;
+  font-style: italic;
+}

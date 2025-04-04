@@ -1,294 +1,295 @@
-async function checkAuth() {
-  console.log('Checking authentication status...');
-  try {
-    const response = await fetch(`${BACKEND_URL}/auth/user`, { 
-      credentials: 'include', 
-      headers: { 'Accept': 'application/json' }
-    });
-    console.log('Auth response status:', response.status);
-    if (response.ok) {
-      const data = await response.json();
-      console.log('User data:', data);
 
-      const loginLink = document.getElementById('login-link');
-      const userDropdown = document.getElementById('user-dropdown');
-      const userInfo = document.getElementById('user-info');
-      const userPfp = document.getElementById('user-pfp');
-      
-      if (loginLink) loginLink.style.display = 'none';
-      if (userDropdown) userDropdown.style.display = 'inline-block';
-      if (userInfo) userInfo.textContent = `${data.user.username}#${data.user.discriminator}`;
-      if (userPfp) {
-        userPfp.src = data.user.avatar 
-          ? `https://cdn.discordapp.com/avatars/${data.user.id}/${data.user.avatar}.png?size=32` 
-          : 'https://via.placeholder.com/32';
-      }
-
-      const userProfile = document.getElementById('user-profile');
-      const userAvatar = document.getElementById('user-avatar');
-      const userGreeting = document.getElementById('user-greeting');
-      
-      if (userProfile) userProfile.style.display = 'flex';
-      if (userAvatar) {
-        userAvatar.src = data.user.avatar 
-          ? `https://cdn.discordapp.com/avatars/${data.user.id}/${data.user.avatar}.png?size=100` 
-          : 'https://via.placeholder.com/100';
-      }
-      if (userGreeting) userGreeting.textContent = `Hello, ${data.user.username}#${data.user.discriminator}!`;
-
-      return data;
-    } else {
-      console.log('User not authenticated, status:', response.status);
-      const loginLink = document.getElementById('login-link');
-      const userDropdown = document.getElementById('user-dropdown');
-      if (loginLink) loginLink.style.display = 'inline';
-      if (userDropdown) userDropdown.style.display = 'none';
-      Swal.fire({
-        title: 'Not Logged In',
-        text: 'Please log in to view your dashboard.',
-        icon: 'warning',
-        confirmButtonColor: '#1e40af'
-      }).then(() => {
-        window.location.href = '/index.html';
-      });
-      return null;
-    }
-  } catch (error) {
-    console.error('Error checking auth:', error.message);
-    const loginLink = document.getElementById('login-link');
-    const userDropdown = document.getElementById('user-dropdown');
-    if (loginLink) loginLink.style.display = 'inline';
-    if (userDropdown) userDropdown.style.display = 'none';
-    return null;
-  }
-}
-
-async function loadBookings() {
-  const checkinGrid = document.getElementById('checkin-flights-grid');
-  const noCheckinFlightsMessage = document.getElementById('no-flights');
-  const loadingCheckinFlights = document.getElementById('loading-flights');
-  const manageGrid = document.getElementById('manage-flights-grid');
-  const noManageFlightsMessage = document.getElementById('no-manage-flights');
-  const loadingManageFlights = document.getElementById('loading-manage-flights');
-
-  if (!checkinGrid || !noCheckinFlightsMessage || !loadingCheckinFlights || 
-      !manageGrid || !noManageFlightsMessage || !loadingManageFlights) {
-    console.error('Required elements for loadBookings not found');
-    return;
-  }
-
-  console.log('Fetching bookings from:', `${BACKEND_URL}/bookings`);
-  loadingCheckinFlights.style.display = 'block';
-  loadingManageFlights.style.display = 'block';
-  checkinGrid.innerHTML = '';
-  manageGrid.innerHTML = '';
-  noCheckinFlightsMessage.style.display = 'none';
-  noManageFlightsMessage.style.display = 'none';
-
-  try {
-    const bookingsResponse = await fetch(`${BACKEND_URL}/bookings`, { 
-      method: 'GET',
-      credentials: 'include',
-      headers: { 'Accept': 'application/json' }
-    });
-    console.log('Bookings fetch status:', bookingsResponse.status);
-    if (!bookingsResponse.ok) {
-      throw new Error(`Bookings fetch failed with status ${bookingsResponse.status}`);
-    }
-    const bookings = await bookingsResponse.json();
-    console.log('Raw bookings response:', bookings);
-
-    // Check-in ready bookings (within 24 hours, not checked in)
-    const checkinReadyBookings = bookings.filter(booking => {
-      const departureTime = new Date(booking.flight.departure);
-      const now = new Date();
-      const timeDiff = departureTime - now;
-      return timeDiff > 0 && timeDiff <= 24 * 60 * 60 * 1000 && !booking.boardingPosition;
-    });
-    console.log('Check-in ready bookings:', checkinReadyBookings);
-
-    if (checkinReadyBookings.length === 0) {
-      console.log('No check-in ready bookings');
-      noCheckinFlightsMessage.style.display = 'block';
-    } else {
-      console.log(`Rendering ${checkinReadyBookings.length} check-in ready bookings`);
-      checkinReadyBookings.forEach((booking, index) => {
-        const flight = booking.flight || { id: 'N/A', from: 'Unknown', to: 'Unknown', departure: 'N/A', aircraft: 'N/A' };
-        const card = document.createElement('div');
-        card.className = 'booking-card';
-        card.innerHTML = `
-          <h3 class="font-swabold">Flight #${flight.id}</h3>
-          <p><strong>From:</strong> ${flight.from}</p>
-          <p><strong>To:</strong> ${flight.to}</p>
-          <p><strong>Departure:</strong> ${new Date(flight.departure).toLocaleString()}</p>
-          <p><strong>Aircraft:</strong> ${flight.aircraft}</p>
-          <p><strong>Confirmation:</strong> ${booking.confirmationNumber}</p>
-          <a href="/checkin.html?confirmationNumber=${booking.confirmationNumber}" class="select-button">Check In Now</a>
-        `;
-        console.log(`Appending check-in booking card ${index + 1}:`, card.outerHTML);
-        checkinGrid.appendChild(card);
-      });
-      console.log('Check-in bookings grid after render:', checkinGrid.innerHTML);
-    }
-
-    // All bookings for management
-    if (bookings.length === 0) {
-      console.log('No bookings to manage');
-      noManageFlightsMessage.style.display = 'block';
-    } else {
-      console.log(`Rendering ${bookings.length} bookings for management`);
-      bookings.forEach((booking, index) => {
-        const flight = booking.flight || { id: 'N/A', from: 'Unknown', to: 'Unknown', departure: 'N/A', aircraft: 'N/A' };
-        const departureTime = new Date(flight.departure);
-        const now = new Date();
-        const timeDiff = departureTime - now;
-        const canCancel = timeDiff > 0; // Can cancel if flight hasn't departed
-
-        const card = document.createElement('div');
-        card.className = 'booking-card';
-        card.innerHTML = `
-          <h3 class="font-swabold">Flight #${flight.id}</h3>
-          <p><strong>From:</strong> ${flight.from}</p>
-          <p><strong>To:</strong> ${flight.to}</p>
-          <p><strong>Departure:</strong> ${new Date(flight.departure).toLocaleString()}</p>
-          <p><strong>Aircraft:</strong> ${flight.aircraft}</p>
-          <p><strong>Confirmation:</strong> ${booking.confirmationNumber}</p>
-          ${canCancel ? `<button class="cancel-button" data-booking-id="${booking.id}">Cancel Booking</button>` : '<p class="no-data">Flight has departed</p>'}
-        `;
-        console.log(`Appending manage booking card ${index + 1}:`, card.outerHTML);
-        manageGrid.appendChild(card);
-      });
-      console.log('Manage bookings grid after render:', manageGrid.innerHTML);
-
-      // Attach cancel event listeners
-      document.querySelectorAll('.cancel-button').forEach(button => {
-        button.addEventListener('click', async (e) => {
-          const bookingId = e.target.getAttribute('data-booking-id');
-          Swal.fire({
-            title: 'Are you sure?',
-            text: 'Do you want to cancel this booking? This action cannot be undone.',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#1e40af',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, cancel it!'
-          }).then(async (result) => {
-            if (result.isConfirmed) {
-              try {
-                const response = await fetch(`${BACKEND_URL}/bookings/cancel`, {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({ bookingId }),
-                  credentials: 'include'
-                });
-                if (response.ok) {
-                  Swal.fire({
-                    title: 'Booking Canceled',
-                    text: 'Your booking has been canceled successfully.',
-                    icon: 'success',
-                    confirmButtonColor: '#1e40af'
-                  }).then(() => {
-                    loadBookings(); // Refresh the bookings
-                  });
-                } else {
-                  const data = await response.json();
-                  Swal.fire({
-                    title: 'Error',
-                    text: data.error || 'Failed to cancel booking.',
-                    icon: 'error',
-                    confirmButtonColor: '#1e40af'
-                  });
-                }
-              } catch (error) {
-                console.error('Error canceling booking:', error);
-                Swal.fire({
-                  title: 'Error',
-                  text: 'Failed to cancel booking. Please try again.',
-                  icon: 'error',
-                  confirmButtonColor: '#1e40af'
-                });
-              }
-            }
-          });
+    async function checkAuth() {
+      console.log('Checking authentication status...');
+      try {
+        const response = await fetch(`${BACKEND_URL}/auth/user`, { 
+          credentials: 'include', 
+          headers: { 'Accept': 'application/json' }
         });
-      });
-    }
-  } catch (error) {
-    console.error('Error fetching bookings:', error.message);
-    noCheckinFlightsMessage.textContent = `Error loading flights: ${error.message}. Please try again later.`;
-    noCheckinFlightsMessage.style.display = 'block';
-    noManageFlightsMessage.textContent = `Error loading bookings: ${error.message}. Please try again later.`;
-    noManageFlightsMessage.style.display = 'block';
-  } finally {
-    loadingCheckinFlights.style.display = 'none';
-    loadingManageFlights.style.display = 'none';
-  }
-}
+        console.log('Auth response status:', response.status);
+        if (response.ok) {
+          const data = await response.json();
+          console.log('User data:', data);
 
-async function loadRewardsPoints() {
-  const rewardsPoints = document.getElementById('rewards-points');
-  if (!rewardsPoints) {
-    console.error('Rewards points element not found');
-    return;
-  }
-
-  try {
-    const response = await fetch(`${BACKEND_URL}/rewards`, { credentials: 'include' });
-    if (!response.ok) {
-      throw new Error('Failed to fetch rewards points');
-    }
-    const data = await response.json();
-    rewardsPoints.textContent = data.points.toLocaleString();
-  } catch (error) {
-    console.error('Error loading rewards points:', error);
-    rewardsPoints.textContent = '0';
-  }
-}
-
-document.addEventListener('DOMContentLoaded', async () => {
-  console.log('DOM loaded, checking auth');
-  const userData = await checkAuth();
-  if (userData) {
-    console.log('User authenticated, loading dashboard data');
-    await Promise.all([loadBookings(), loadRewardsPoints()]);
-
-    const loginLink = document.getElementById('login-link');
-    const logoutLink = document.getElementById('logout-link');
-
-    if (loginLink) {
-      loginLink.addEventListener('click', (e) => {
-        e.preventDefault();
-        console.log('Login link clicked');
-        window.location.href = `${BACKEND_URL}/auth/discord`;
-      });
-    }
-
-    if (logoutLink) {
-      logoutLink.addEventListener('click', async (e) => {
-        e.preventDefault();
-        console.log('Logout link clicked');
-        try {
-          const response = await fetch(`${BACKEND_URL}/auth/logout`, { credentials: 'include' });
-          if (response.ok) {
-            Swal.fire({
-              title: 'Logged Out',
-              text: 'You have been logged out successfully.',
-              icon: 'success',
-              confirmButtonColor: '#1e40af'
-            }).then(() => {
-              window.location.href = '/index.html';
-            });
+          const loginLink = document.getElementById('login-link');
+          const userDropdown = document.getElementById('user-dropdown');
+          const userInfo = document.getElementById('user-info');
+          const userPfp = document.getElementById('user-pfp');
+          
+          if (loginLink) loginLink.style.display = 'none';
+          if (userDropdown) userDropdown.style.display = 'inline-block';
+          if (userInfo) userInfo.textContent = `${data.user.username}#${data.user.discriminator}`;
+          if (userPfp) {
+            userPfp.src = data.user.avatar 
+              ? `https://cdn.discordapp.com/avatars/${data.user.id}/${data.user.avatar}.png?size=32` 
+              : 'https://via.placeholder.com/32';
           }
-        } catch (error) {
-          console.error('Error logging out:', error);
+
+          const userProfile = document.getElementById('user-profile');
+          const userAvatar = document.getElementById('user-avatar');
+          const userGreeting = document.getElementById('user-greeting');
+          
+          if (userProfile) userProfile.style.display = 'flex';
+          if (userAvatar) {
+            userAvatar.src = data.user.avatar 
+              ? `https://cdn.discordapp.com/avatars/${data.user.id}/${data.user.avatar}.png?size=100` 
+              : 'https://via.placeholder.com/100';
+          }
+          if (userGreeting) userGreeting.textContent = `Hello, ${data.user.username}#${data.user.discriminator}!`;
+
+          return data;
+        } else {
+          console.log('User not authenticated, status:', response.status);
+          const loginLink = document.getElementById('login-link');
+          const userDropdown = document.getElementById('user-dropdown');
+          if (loginLink) loginLink.style.display = 'inline';
+          if (userDropdown) userDropdown.style.display = 'none';
           Swal.fire({
-            title: 'Error',
-            text: 'Failed to log out. Please try again.',
-            icon: 'error',
+            title: 'Not Logged In',
+            text: 'Please log in to view your dashboard.',
+            icon: 'warning',
             confirmButtonColor: '#1e40af'
+          }).then(() => {
+            window.location.href = '/index.html';
+          });
+          return null;
+        }
+      } catch (error) {
+        console.error('Error checking auth:', error.message);
+        const loginLink = document.getElementById('login-link');
+        const userDropdown = document.getElementById('user-dropdown');
+        if (loginLink) loginLink.style.display = 'inline';
+        if (userDropdown) userDropdown.style.display = 'none';
+        return null;
+      }
+    }
+
+    async function loadBookings() {
+      const checkinGrid = document.getElementById('checkin-flights-grid');
+      const noCheckinFlightsMessage = document.getElementById('no-flights');
+      const loadingCheckinFlights = document.getElementById('loading-flights');
+      const manageGrid = document.getElementById('manage-flights-grid');
+      const noManageFlightsMessage = document.getElementById('no-manage-flights');
+      const loadingManageFlights = document.getElementById('loading-manage-flights');
+
+      if (!checkinGrid || !noCheckinFlightsMessage || !loadingCheckinFlights || 
+          !manageGrid || !noManageFlightsMessage || !loadingManageFlights) {
+        console.error('Required elements for loadBookings not found');
+        return;
+      }
+
+      console.log('Fetching bookings from:', `${BACKEND_URL}/bookings`);
+      loadingCheckinFlights.style.display = 'block';
+      loadingManageFlights.style.display = 'block';
+      checkinGrid.innerHTML = '';
+      manageGrid.innerHTML = '';
+      noCheckinFlightsMessage.style.display = 'none';
+      noManageFlightsMessage.style.display = 'none';
+
+      try {
+        const bookingsResponse = await fetch(`${BACKEND_URL}/bookings`, { 
+          method: 'GET',
+          credentials: 'include',
+          headers: { 'Accept': 'application/json' }
+        });
+        console.log('Bookings fetch status:', bookingsResponse.status);
+        if (!bookingsResponse.ok) {
+          throw new Error(`Bookings fetch failed with status ${bookingsResponse.status}`);
+        }
+        const bookings = await bookingsResponse.json();
+        console.log('Raw bookings response:', bookings);
+
+        // Check-in ready bookings (within 24 hours, not checked in)
+        const checkinReadyBookings = bookings.filter(booking => {
+          const departureTime = new Date(booking.flight.departure);
+          const now = new Date();
+          const timeDiff = departureTime - now;
+          return timeDiff > 0 && timeDiff <= 24 * 60 * 60 * 1000 && !booking.boardingPosition;
+        });
+        console.log('Check-in ready bookings:', checkinReadyBookings);
+
+        if (checkinReadyBookings.length === 0) {
+          console.log('No check-in ready bookings');
+          noCheckinFlightsMessage.style.display = 'block';
+        } else {
+          console.log(`Rendering ${checkinReadyBookings.length} check-in ready bookings`);
+          checkinReadyBookings.forEach((booking, index) => {
+            const flight = booking.flight || { id: 'N/A', from: 'Unknown', to: 'Unknown', departure: 'N/A', aircraft: 'N/A' };
+            const card = document.createElement('div');
+            card.className = 'booking-card';
+            card.innerHTML = `
+              <h3 class="font-swabold">Flight #${flight.id}</h3>
+              <p><strong>From:</strong> ${flight.from}</p>
+              <p><strong>To:</strong> ${flight.to}</p>
+              <p><strong>Departure:</strong> ${new Date(flight.departure).toLocaleString()}</p>
+              <p><strong>Aircraft:</strong> ${flight.aircraft}</p>
+              <p><strong>Confirmation:</strong> ${booking.confirmationNumber}</p>
+              <a href="/checkin.html?confirmationNumber=${booking.confirmationNumber}" class="select-button">Check In Now</a>
+            `;
+            console.log(`Appending check-in booking card ${index + 1}:`, card.outerHTML);
+            checkinGrid.appendChild(card);
+          });
+          console.log('Check-in bookings grid after render:', checkinGrid.innerHTML);
+        }
+
+        // All bookings for management
+        if (bookings.length === 0) {
+          console.log('No bookings to manage');
+          noManageFlightsMessage.style.display = 'block';
+        } else {
+          console.log(`Rendering ${bookings.length} bookings for management`);
+          bookings.forEach((booking, index) => {
+            const flight = booking.flight || { id: 'N/A', from: 'Unknown', to: 'Unknown', departure: 'N/A', aircraft: 'N/A' };
+            const departureTime = new Date(flight.departure);
+            const now = new Date();
+            const timeDiff = departureTime - now;
+            const canCancel = timeDiff > 0; // Can cancel if flight hasn't departed
+
+            const card = document.createElement('div');
+            card.className = 'booking-card';
+            card.innerHTML = `
+              <h3 class="font-swabold">Flight #${flight.id}</h3>
+              <p><strong>From:</strong> ${flight.from}</p>
+              <p><strong>To:</strong> ${flight.to}</p>
+              <p><strong>Departure:</strong> ${new Date(flight.departure).toLocaleString()}</p>
+              <p><strong>Aircraft:</strong> ${flight.aircraft}</p>
+              <p><strong>Confirmation:</strong> ${booking.confirmationNumber}</p>
+              ${canCancel ? `<button class="cancel-button" data-booking-id="${booking.id}">Cancel Booking</button>` : '<p class="no-data">Flight has departed</p>'}
+            `;
+            console.log(`Appending manage booking card ${index + 1}:`, card.outerHTML);
+            manageGrid.appendChild(card);
+          });
+          console.log('Manage bookings grid after render:', manageGrid.innerHTML);
+
+          // Attach cancel event listeners
+          document.querySelectorAll('.cancel-button').forEach(button => {
+            button.addEventListener('click', async (e) => {
+              const bookingId = e.target.getAttribute('data-booking-id');
+              Swal.fire({
+                title: 'Are you sure?',
+                text: 'Do you want to cancel this booking? This action cannot be undone.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#1e40af',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, cancel it!'
+              }).then(async (result) => {
+                if (result.isConfirmed) {
+                  try {
+                    const response = await fetch(`${BACKEND_URL}/bookings/cancel`, {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({ bookingId }),
+                      credentials: 'include'
+                    });
+                    if (response.ok) {
+                      Swal.fire({
+                        title: 'Booking Canceled',
+                        text: 'Your booking has been canceled successfully.',
+                        icon: 'success',
+                        confirmButtonColor: '#1e40af'
+                      }).then(() => {
+                        loadBookings(); // Refresh the bookings
+                      });
+                    } else {
+                      const data = await response.json();
+                      Swal.fire({
+                        title: 'Error',
+                        text: data.error || 'Failed to cancel booking.',
+                        icon: 'error',
+                        confirmButtonColor: '#1e40af'
+                      });
+                    }
+                  } catch (error) {
+                    console.error('Error canceling booking:', error);
+                    Swal.fire({
+                      title: 'Error',
+                      text: 'Failed to cancel booking. Please try again.',
+                      icon: 'error',
+                      confirmButtonColor: '#1e40af'
+                    });
+                  }
+                }
+              });
+            });
           });
         }
-      });
+      } catch (error) {
+        console.error('Error fetching bookings:', error.message);
+        noCheckinFlightsMessage.textContent = `Error loading flights: ${error.message}. Please try again later.`;
+        noCheckinFlightsMessage.style.display = 'block';
+        noManageFlightsMessage.textContent = `Error loading bookings: ${error.message}. Please try again later.`;
+        noManageFlightsMessage.style.display = 'block';
+      } finally {
+        loadingCheckinFlights.style.display = 'none';
+        loadingManageFlights.style.display = 'none';
+      }
     }
-  }
-});
+
+    async function loadRewardsPoints() {
+      const rewardsPoints = document.getElementById('rewards-points');
+      if (!rewardsPoints) {
+        console.error('Rewards points element not found');
+        return;
+      }
+
+      try {
+        const response = await fetch(`${BACKEND_URL}/rewards`, { credentials: 'include' });
+        if (!response.ok) {
+          throw new Error('Failed to fetch rewards points');
+        }
+        const data = await response.json();
+        rewardsPoints.textContent = data.points.toLocaleString();
+      } catch (error) {
+        console.error('Error loading rewards points:', error);
+        rewardsPoints.textContent = '0';
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      console.log('DOM loaded, checking auth');
+      const userData = await checkAuth();
+      if (userData) {
+        console.log('User authenticated, loading dashboard data');
+        await Promise.all([loadBookings(), loadRewardsPoints()]);
+
+        const loginLink = document.getElementById('login-link');
+        const logoutLink = document.getElementById('logout-link');
+
+        if (loginLink) {
+          loginLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            console.log('Login link clicked');
+            window.location.href = `${BACKEND_URL}/auth/discord`;
+          });
+        }
+
+        if (logoutLink) {
+          logoutLink.addEventListener('click', async (e) => {
+            e.preventDefault();
+            console.log('Logout link clicked');
+            try {
+              const response = await fetch(`${BACKEND_URL}/auth/logout`, { credentials: 'include' });
+              if (response.ok) {
+                Swal.fire({
+                  title: 'Logged Out',
+                  text: 'You have been logged out successfully.',
+                  icon: 'success',
+                  confirmButtonColor: '#1e40af'
+                }).then(() => {
+                  window.location.href = '/index.html';
+                });
+              }
+            } catch (error) {
+              console.error('Error logging out:', error);
+              Swal.fire({
+                title: 'Error',
+                text: 'Failed to log out. Please try again.',
+                icon: 'error',
+                confirmButtonColor: '#1e40af'
+              });
+            }
+          });
+        }
+      }
+    });

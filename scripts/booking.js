@@ -69,7 +69,7 @@ async function bookFlight(flightId) {
     });
     const data = await response.json();
     if (response.ok) {
-      alert(`Flight ${flightId} booked successfully! Booking ID: ${data.booking.id}`);
+      alert(`Flight ${flightId} booked successfully! Your Confirmation # is: ${data.confirmationNumber}`);
       document.getElementById('booking-modal').style.display = 'none';
       loadFlights();
     } else {
@@ -81,15 +81,15 @@ async function bookFlight(flightId) {
   }
 }
 
-document.getElementById('flight-search-form').addEventListener('submit', (e) => {
-  e.preventDefault();
-  const filters = {
-    from: document.getElementById('from').value,
-    to: document.getElementById('to').value,
-    date: document.getElementById('date').value
-  };
-  loadFlights(filters);
-});
+// document.getElementById('flight-search-form').addEventListener('submit', (e) => {
+//   e.preventDefault();
+//   const filters = {
+//     from: document.getElementById('from').value,
+//     to: document.getElementById('to').value,
+//     date: document.getElementById('date').value
+//   };
+//   loadFlights(filters);
+// });
 
 document.getElementById('login-link').addEventListener('click', (e) => {
   e.preventDefault();

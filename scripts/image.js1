@@ -1,0 +1,11 @@
+document.addEventListener("DOMContentLoaded", () => {
+  const heroBg = document.getElementById("hero-bg");
+  const totalImages = 8;
+
+  const images = Array.from({ length: totalImages }, (_, i) =>
+    `/images/banners/Image${i + 1}.png`
+  );
+
+  const randomIndex = Math.floor(Math.random() * images.length);
+  heroBg.style.backgroundImage = `url('${images[randomIndex]}')`;
+});

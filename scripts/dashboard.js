@@ -13,7 +13,9 @@ async function checkAuth() {
       document.getElementById('user-dropdown').style.display = 'inline-block';
       document.getElementById('user-info').textContent = `${data.user.username}#${data.user.discriminator}`;
       document.getElementById('user-profile').style.display = 'flex';
-      document.getElementById('user-avatar').src = data.user.avatar ? `https://cdn.discordapp.com/avatars/${data.user.id}/${data.user.avatar}.png` : 'https://via.placeholder.com/100';
+      document.getElementById('user-avatar').src = data.user.avatar 
+        ? `https://cdn.discordapp.com/avatars/${data.user.id}/${data.user.avatar}.png?size=100` 
+        : 'https://via.placeholder.com/100';
       document.getElementById('user-greeting').textContent = `Hello, ${data.user.username}#${data.user.discriminator}!`;
       return data;
     } else {
@@ -49,7 +51,6 @@ async function loadBookings() {
   noFlightsMessage.style.display = 'none';
 
   try {
-    // Fetch bookings
     const bookingsResponse = await fetch(`${BACKEND_URL}/bookings`, { 
       method: 'GET',
       credentials: 'include',
@@ -62,33 +63,14 @@ async function loadBookings() {
     const bookings = await bookingsResponse.json();
     console.log('Raw bookings response:', bookings);
 
-    // Fetch flights
-    const flightsResponse = await fetch(`${BACKEND_URL}/flights`, { 
-      method: 'GET',
-      credentials: 'include',
-      headers: { 'Accept': 'application/json' }
-    });
-    console.log('Flights fetch status:', flightsResponse.status);
-    if (!flightsResponse.ok) {
-      throw new Error(`Flights fetch failed with status ${flightsResponse.status}`);
-    }
-    const flights = await flightsResponse.json();
-    console.log('Raw flights response:', flights);
-
-    // Merge bookings with flight data
-    const enrichedBookings = bookings.map(booking => {
-      const flight = flights.find(f => f.id === booking.flightId) || {};
-      return { ...booking, flight };
-    });
-    console.log('Enriched bookings:', enrichedBookings);
-
-    // Filter for check-in ready bookings
-    const checkinReadyBookings = enrichedBookings.filter(booking => {
+    // Since flight data is already embedded, no need to fetch flights separately
+    const checkinReadyBookings = bookings.filter(booking => {
       const departureTime = new Date(booking.flight.departure);
       const now = new Date();
       const timeDiff = departureTime - now;
-      // Show flights departing within 24 hours that haven't been checked in
-      return timeDiff > 0 && timeDiff <= 24 * 60 * 60 * 1000 && !booking.boardingPosition;
+      console.log(`Booking ${booking.id}: Departure ${departureTime}, Time diff: ${timeDiff / (1000 * 60 * 60)} hours`);
+      // Show all future flights that haven't been checked in
+      return timeDiff > 0 && !booking.boardingPosition;
     });
     console.log('Check-in ready bookings:', checkinReadyBookings);
 

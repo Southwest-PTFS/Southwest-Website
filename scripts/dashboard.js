@@ -191,20 +191,35 @@ async function loadRewardsPoints() {
 async function checkDiscordLink() {
   try {
     const userData = await checkAuth();
-    if (!userData) return; // Stop if not authenticated
-    const response = await fetch(`${BACKEND_URL}/linked/${userData.user.id}`, { credentials: 'include' });
+    if (!userData) {
+      console.log('No user data, cannot check Discord link');
+      return;
+    }
+    console.log('Checking Discord link for user ID:', userData.user.id);
+    const response = await fetch(`${BACKEND_URL}/linked/${userData.user.id}`, { 
+      credentials: 'include',
+      headers: { 'Accept': 'application/json' }
+    });
+    if (!response.ok) {
+      throw new Error(`Failed to check Discord link, status: ${response.status}`);
+    }
     const data = await response.json();
+    console.log('Discord link check response:', data);
     const linkedDiv = document.getElementById('discord-linked');
     const linkForm = document.getElementById('discord-link-form');
     if (data.linked) {
+      console.log('Account is linked, hiding form');
       linkedDiv.style.display = 'block';
       linkForm.style.display = 'none';
     } else {
+      console.log('Account is not linked, showing form');
       linkedDiv.style.display = 'none';
       linkForm.style.display = 'block';
     }
   } catch (error) {
     console.error('Error checking Discord link:', error);
+    // Default to showing the form if there's an error
+    document.getElementById('discord-linked').style.display = 'none';
     document.getElementById('discord-link-form').style.display = 'block';
   }
 }

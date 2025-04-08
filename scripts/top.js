@@ -12,15 +12,6 @@ async function checkAuth() {
       document.getElementById('login-link').style.display = 'none';
       document.getElementById('user-dropdown').style.display = 'inline-block';
       document.getElementById('user-info').textContent = `${data.user.username}#${data.user.discriminator}`;
-      // Set PFP in topbar
-      document.getElementById('user-pfp').src = data.user.avatar 
-        ? `https://cdn.discordapp.com/avatars/${data.user.id}/${data.user.avatar}.png?size=32` 
-        : 'https://via.placeholder.com/32';
-      // Set avatar in dashboard
-      document.getElementById('user-profile').style.display = 'flex';
-      document.getElementById('user-avatar').src = data.user.avatar 
-        ? `https://cdn.discordapp.com/avatars/${data.user.id}/${data.user.avatar}.png?size=100` 
-        : 'https://via.placeholder.com/100';
       document.getElementById('user-greeting').textContent = `Hello, ${data.user.username}#${data.user.discriminator}!`;
       return data;
     } else {

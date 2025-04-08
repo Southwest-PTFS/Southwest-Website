@@ -190,7 +190,9 @@ async function loadRewardsPoints() {
 
 async function checkDiscordLink() {
   try {
-    const response = await fetch(`${BACKEND_URL}/linked/${(await checkAuth())?.user?.id}`, { credentials: 'include' });
+    const userData = await checkAuth();
+    if (!userData) return; // Stop if not authenticated
+    const response = await fetch(`${BACKEND_URL}/linked/${userData.user.id}`, { credentials: 'include' });
     const data = await response.json();
     const linkedDiv = document.getElementById('discord-linked');
     const linkForm = document.getElementById('discord-link-form');
@@ -210,7 +212,12 @@ async function checkDiscordLink() {
 async function linkDiscord() {
   const linkingCode = document.getElementById('linking-code').value.trim();
   if (!linkingCode) {
-    Swal.fire('Error', 'Please enter a linking code.', 'error');
+    Swal.fire({
+      title: 'Error',
+      text: 'Please enter a linking code.',
+      icon: 'error',
+      confirmButtonColor: '#1e40af'
+    });
     return;
   }
 
@@ -224,17 +231,42 @@ async function linkDiscord() {
     const data = await response.json();
 
     if (data.redirect) {
-      window.location.href = data.redirect; // Redirect to Discord OAuth
+      Swal.fire({
+        title: 'Redirecting',
+        text: 'You will be redirected to Discord to authorize the linking.',
+        icon: 'info',
+        confirmButtonColor: '#1e40af',
+        timer: 2000,
+        timerProgressBar: true,
+        willClose: () => {
+          window.location.href = data.redirect;
+        }
+      });
     } else if (data.message) {
-      Swal.fire('Success', data.message, 'success').then(() => {
-        checkDiscordLink(); // Refresh link status
+      Swal.fire({
+        title: 'Success',
+        text: data.message,
+        icon: 'success',
+        confirmButtonColor: '#1e40af'
+      }).then(() => {
+        checkDiscordLink();
       });
     } else {
-      Swal.fire('Error', data.error || 'Failed to link Discord.', 'error');
+      Swal.fire({
+        title: 'Error',
+        text: data.error || 'Failed to link Discord.',
+        icon: 'error',
+        confirmButtonColor: '#1e40af'
+      });
     }
   } catch (error) {
     console.error('Error linking Discord:', error);
-    Swal.fire('Error', 'Failed to link Discord. Please try again.', 'error');
+    Swal.fire({
+      title: 'Error',
+      text: 'Failed to link Discord. Please try again.',
+      icon: 'error',
+      confirmButtonColor: '#1e40af'
+    });
   }
 }
 
@@ -257,13 +289,23 @@ document.addEventListener('DOMContentLoaded', async () => {
       try {
         const response = await fetch(`${BACKEND_URL}/auth/logout`, { credentials: 'include' });
         if (response.ok) {
-          Swal.fire('Logged Out', 'You have been logged out successfully.', 'success').then(() => {
+          Swal.fire({
+            title: 'Logged Out',
+            text: 'You have been logged out successfully.',
+            icon: 'success',
+            confirmButtonColor: '#1e40af'
+          }).then(() => {
             window.location.href = '/index.html';
           });
         }
       } catch (error) {
         console.error('Error logging out:', error);
-        Swal.fire('Error', 'Failed to log out. Please try again.', 'error');
+        Swal.fire({
+          title: 'Error',
+          text: 'Failed to log out. Please try again.',
+          icon: 'error',
+          confirmButtonColor: '#1e40af'
+        });
       }
     });
 

@@ -69,18 +69,32 @@ async function bookFlight(flightId) {
     });
     const data = await response.json();
     if (response.ok) {
-      alert(`Flight ${flightId} booked successfully! Your Confirmation # is: ${data.booking.confirmationNumber}`);
+      await Swal.fire({
+        icon: 'success',
+        title: 'Booking Confirmed!',
+        text: `Flight ${flightId} booked successfully! Your Confirmation # is: ${data.booking.confirmationNumber}`,
+        confirmButtonText: 'OK'
+      });
       document.getElementById('booking-modal').style.display = 'none';
       loadFlights();
     } else {
-      alert(`Error: ${data.error}`);
+      await Swal.fire({
+        icon: 'error',
+        title: 'Booking Failed',
+        text: `Error: ${data.error}`,
+        confirmButtonText: 'Try Again'
+      });
     }
   } catch (error) {
     console.error('Error booking flight:', error);
-    alert('Failed to book flight. Are you logged in?');
+    await Swal.fire({
+      icon: 'error',
+      title: 'Booking Error',
+      text: 'Failed to book flight. Are you logged in?',
+      confirmButtonText: 'OK'
+    });
   }
 }
-
 
 document.getElementById('login-link').addEventListener('click', (e) => {
   e.preventDefault();
@@ -92,7 +106,12 @@ document.getElementById('logout-link').addEventListener('click', async (e) => {
   try {
     const response = await fetch(`${BACKEND_URL}/auth/logout`, { credentials: 'include' });
     if (response.ok) {
-      alert('Logged out successfully');
+      await Swal.fire({
+        icon: 'success',
+        title: 'Logged Out',
+        text: 'You have been logged out successfully',
+        confirmButtonText: 'OK'
+      });
       checkAuth();
       loadFlights();
     }

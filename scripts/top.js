@@ -6,18 +6,27 @@ async function checkAuth() {
       headers: { 'Accept': 'application/json' }
     });
     console.log('Auth response status:', response.status);
+    
+    const loginLink = document.getElementById('login-link');
+    const userDropdown = document.getElementById('user-dropdown');
+    const userInfo = document.getElementById('user-info');
+    const userGreeting = document.getElementById('user-greeting');
+
     if (response.ok) {
       const data = await response.json();
       console.log('User data:', data);
-      document.getElementById('login-link').style.display = 'none';
-      document.getElementById('user-dropdown').style.display = 'inline-block';
-      document.getElementById('user-info').textContent = `${data.user.username}#${data.user.discriminator}`;
-      document.getElementById('user-greeting').textContent = `Hello, ${data.user.username}#${data.user.discriminator}!`;
+
+      if (loginLink) loginLink.style.display = 'none';
+      if (userDropdown) userDropdown.style.display = 'inline-block';
+      if (userInfo) userInfo.textContent = `${data.user.username}#${data.user.discriminator}`;
+      if (userGreeting) userGreeting.textContent = `Hello, ${data.user.username}#${data.user.discriminator}!`;
+
       return data;
     } else {
       console.log('User not authenticated, status:', response.status);
-      document.getElementById('login-link').style.display = 'inline';
-      document.getElementById('user-dropdown').style.display = 'none';
+      if (loginLink) loginLink.style.display = 'inline';
+      if (userDropdown) userDropdown.style.display = 'none';
+      
       Swal.fire({
         title: 'Not Logged In',
         text: 'Please log in to view your dashboard.',
@@ -26,15 +35,22 @@ async function checkAuth() {
       }).then(() => {
         window.location.href = '/index.html';
       });
+
       return null;
     }
   } catch (error) {
     console.error('Error checking auth:', error.message);
-    document.getElementById('login-link').style.display = 'inline';
-    document.getElementById('user-dropdown').style.display = 'none';
+    
+    const loginLink = document.getElementById('login-link');
+    const userDropdown = document.getElementById('user-dropdown');
+
+    if (loginLink) loginLink.style.display = 'inline';
+    if (userDropdown) userDropdown.style.display = 'none';
+
     return null;
   }
 }
+
 
 async function loadBookings() {
   const grid = document.getElementById('checkin-flights-grid');

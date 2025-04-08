@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Southwest Airlines PTFS - Dashboard</title>
+  <title>Southwest Airlines PTFS - Check In</title>
   <link rel="stylesheet" href="styles.css" />
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
@@ -11,7 +11,7 @@
   <header class="navbar">
     <div class="container">
       <a href="/index.html">
-        <img src="/images/branding/banner.png" alt="Southwest Airlines PTFS Logo" class="logo" onerror="this.src='https://via.placeholder.com/150x50?text=Logo+Not+Found'; this.onerror=null;" />
+        <img src="/images/branding/banner.png" alt="Southwest Airlines PTFS Logo" class="logo"/>
       </a>
       <nav class="nav-menu">
         <a href="https://discord.gg/ZGGu6fTrxE" target="_blank">Join</a>
@@ -22,7 +22,7 @@
         <a href="/careers.html">Careers</a>
         <a href="/regulations.html">Regulations</a>
         <span id="auth-status">
-          <a href="#" id="login-link">Login with Discord</a>
+          <a href="https://discord.com/oauth2/authorize?client_id=780288804836868118&redirect_uri=https%3A%2F%2Fapi.awdevsoftware.org%2Fauth%2Fdiscord%2Fcallback&response_type=code&scope=identify" id="login-link">Login with Discord</a>
           <div class="user-dropdown" id="user-dropdown" style="display: none;">
             <span class="username" id="user-info"></span>
             <div class="dropdown-content">
@@ -35,64 +35,56 @@
     </div>
   </header>
 
-  <section class="dashboard-section">
+  <section class="checkin-section">
     <div class="container">
-      <div class="dashboard-header">
-        <h1 class="font-swabold">Dashboard</h1>
-        <div class="user-profile" id="user-profile" style="display: none;">
-          <img id="user-avatar" src="" alt="User Avatar" class="user-avatar" />
-          <p class="font-swabold" id="user-greeting"></p>
+      <h1>Check In</h1>
+      <form id="checkin-form" class="checkin-form">
+        <div class="form-group">
+          <label for="confirmation">Confirmation Number</label>
+          <input type="text" id="confirmation" placeholder="e.g., ABC123" required />
         </div>
-      </div>
+        <div class="regulations-agreement">
+          <h2>Rules & Regulations</h2>
+          <p class="intro">Please review and agree to our community rules before checking in.</p>
+          <ol class="rules-list">
+            <li>You must abide by Discord's Terms of Service and Community Guidelines.</li>
+            <li>You must be 13 years of age or older to be in this community.</li>
+            <li>You must maintain respect for all members regardless of rank, version, or position and keep things positive.</li>
+            <li>Refrain from using hate speech, discriminatory, or derogatory language.</li>
+            <li>Refrain from referencing real-life tragedies or making jokes about such tragedies.</li>
+            <li>Refrain from referencing, describing, or conversing about Sexual or NSFW Topics.</li>
+            <li>Refrain from advertising your Discord Server, YouTube Channel, or any Social Media in undesignated advertisement channels.</li>
+            <li>Do not share Personal Information about yourself, another community member, or another PTC member, regardless of their consent. This means photos, names, addresses, or possible Personally Identifying Information.</li>
+            <li>Refrain from trolling in the server, onboard flights, and being rowdy and annoying in general. We don’t take trolling lightly here.</li>
+            <li>Moderators may add rules on the fly or moderate users for unlisted rules and choose punishments that fit the action.</li>
+            <li>Use common sense.</li>
+          </ol>
+          <div class="agreement-checkbox">
+            <input type="checkbox" id="agree-regulations" required />
+            <label for="agree-regulations">I have read and agree to the Rules & Regulations.</label>
+          </div>
+        </div>
+        <button type="submit" class="checkin-button" id="checkin-button" disabled>Check In</button>
+      </form>
 
-      <!-- Discord Linking Section -->
-      <div class="dashboard-card discord-linking-section">
-        <h2 class="font-swabold">Link Discord Account</h2>
-        <p>Use the code from the bot's DM to link your Discord account for bot commands.</p>
-        <div id="discord-linked" style="display: none;">
-          <p>Your Discord account is linked!</p>
-        </div>
-        <div id="discord-link-form">
-          <input type="text" id="linking-code" placeholder="Enter your linking code" />
-          <button id="link-discord-btn" class="select-button">Link Discord</button>
-        </div>
-      </div>
-
-      <!-- Flights Available to Check In -->
-      <div class="dashboard-card bookings-section">
-        <h2 class="font-swabold">Flights Available to Check In</h2>
-        <div id="loading-flights" class="loading" style="display: none;">
-          <div class="heart-spinner"></div>
-        </div>
-        <div class="bookings-grid" id="checkin-flights-grid"></div>
-        <p id="no-flights" class="no-data" style="display: none;">No flights available to check in at this time.</p>
-      </div>
-
-      <!-- Manage Bookings -->
-      <div class="dashboard-card manage-bookings-section">
-        <h2 class="font-swabold">Manage Bookings</h2>
-        <p>View or cancel your bookings below. To book a new flight, <a href="/book.html">click here</a>.</p>
-        <div id="loading-manage-flights" class="loading" style="display: none;">
-          <div class="heart-spinner"></div>
-        </div>
-        <div class="bookings-grid" id="manage-flights-grid"></div>
-        <p id="no-manage-flights" class="no-data" style="display: none;">You have no bookings to manage.</p>
-      </div>
-
-      <!-- Rapid Rewards Points -->
-      <div class="dashboard-card rewards-section">
-        <h2 class="font-swabold">Rapid Rewards Points</h2>
-        <div class="rewards-display">
-          <span id="rewards-points" class="points-value">0</span>
-          <p>Points</p>
-        </div>
+      <div id="boarding-pass" class="boarding-pass" style="display: none;">
+        <h2>Your Boarding Pass</h2>
+        <img id="boarding-pass-image" alt="Boarding Pass" /><br>
+        <a id="download-link" href="#" download="boarding-pass.png" class="download-button">Download Boarding Pass</a>
       </div>
     </div>
   </section>
 
+  <div id="loading" class="loading" style="display: none;">
+    <div class="heart-spinner"></div>
+  </div>
+
   <footer class="footer">
     <p>© 2025 Southwest Airlines PTFS. Not affiliated with Southwest Airlines.</p>
   </footer>
-
+  
   <script src="/scripts/auth.js"></script>
-  <script src="/scripts/dashboard.js"></script>
+  <script src="/scripts/checkin.js"></script>
+  <script src="/scripts/top.js"></script>
+</body>
+</html>

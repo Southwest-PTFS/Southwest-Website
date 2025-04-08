@@ -9,32 +9,55 @@
 <body>
   <header class="navbar">
     <div class="container">
-      <a href="/index.html">
+      <a href="/index.html" class="banner">
         <img src="/images/branding/banner.png" alt="Southwest Airlines PTFS Logo" class="logo"/>
       </a>
-      <nav class="nav-menu">
-        <a href="https://discord.gg/ZGGu6fTrxE" target="_blank">Join</a>
-        <a href="/index.html">Home</a>
-        <a href="/book.html">Book</a>
-        <a href="/checkin.html">Check In</a>
-        <a href="/contact.html">Contact</a>
-        <a href="/careers.html">Careers</a>
-        <a href="/regulations.html">Regulations</a>
-        <a href="/contact.html">Contact</a>
 
-        <span id="auth-status">
-          <a href="https://discord.com/oauth2/authorize?client_id=780288804836868118&redirect_uri=https%3A%2F%2Fapi.awdevsoftware.org%2Fauth%2Fdiscord%2Fcallback&response_type=code&scope=identify" id="login-link">Login with Discord</a>
-          <div class="user-dropdown" id="user-dropdown" style="display: none;">
-            <span class="username" id="user-info"></span>
+      <nav class="nav-menu">
+        <a href="/index.html">Home</a>
+        <a href="https://discord.gg/ZGGu6fTrxE" target="_blank">Join</a>
+
+        <div class="dropdown">
+            <a href="/book.html">Flights</a>
             <div class="dropdown-content">
-              <a href="/dashboard.html">Dashboard</a>
-              <a href="#" id="logout-link">Logout</a>
+              <a href="/book.html">Book</a>
+              <a href="/checkin.html">Check In</a>
             </div>
+        </div>
+
+        <div class="dropdown">
+            <a href="/careers.html">Careers</a>
+            <div class="dropdown-content">
+              <a href="/careers.html">Pilot</a>
+              <a href="/careers.html">Ground Crew</a>
+              <a href="/careers.html">Flight Attendant</a>
+            </div>
+        </div>
+
+        <div class="dropdown">
+          <a href="/ourmission.html">About</a>
+          <div class="dropdown-content">
+            <a href="/ourmission.html">Our Mission</a>
+            <a href="/regulations.html">Regulations</a>
           </div>
-        </span>
+        </div>
+
+        <a href="/contact.html">Contact</a>
       </nav>
+
+      <span class="auth-wrapper" id="auth-status">
+        <a href="https://discord.com/oauth2/authorize?client_id=780288804836868118&redirect_uri=https%3A%2F%2Fapi.awdevsoftware.org%2Fauth%2Fdiscord%2Fcallback&response_type=code&scope=identify" id="login-link">Login with Discord</a>
+        <div class="user-dropdown" id="user-dropdown" style="display: none;">
+          <span class="username" id="user-info"></span>
+          <div class="dropdown-content">
+            <a href="/dashboard.html">Dashboard</a>
+            <a href="#" id="logout-link">Logout</a>
+          </div>
+        </div>
+      </span>
     </div>
   </header>
+
 
   <section class="hero">
     <div id="hero-bg" class="hero-bg"></div>

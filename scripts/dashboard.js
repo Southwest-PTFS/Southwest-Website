@@ -75,22 +75,18 @@ async function loadBookings() {
     const bookings = await bookingsResponse.json();
     console.log('Raw bookings response:', bookings);
 
-    // Check-in ready bookings (future flights, not checked in)
     const checkinReadyBookings = bookings.filter(booking => {
       const departureTime = new Date(booking.flight.departure);
       const now = new Date();
       const timeDiff = departureTime - now;
-      console.log(`Booking ${booking.id}: Departure ${departureTime}, Time diff: ${timeDiff / (1000 * 60 * 60)} hours, Has boardingPosition: ${!!booking.boardingPosition}`);
       return timeDiff > 0 && !booking.boardingPosition;
     });
     console.log('Check-in ready bookings:', checkinReadyBookings);
 
     if (checkinReadyBookings.length === 0) {
-      console.log('No check-in ready bookings');
       noCheckinFlightsMessage.style.display = 'block';
     } else {
-      console.log(`Rendering ${checkinReadyBookings.length} check-in ready bookings`);
-      checkinReadyBookings.forEach((booking, index) => {
+      checkinReadyBookings.forEach((booking) => {
         const flight = booking.flight || { id: 'N/A', from: 'Unknown', to: 'Unknown', departure: 'N/A', aircraft: 'N/A' };
         const card = document.createElement('div');
         card.className = 'booking-card';
@@ -103,20 +99,14 @@ async function loadBookings() {
           <p><strong>Confirmation:</strong> ${booking.confirmationNumber}</p>
           <a href="/checkin.html?confirmationNumber=${booking.confirmationNumber}" class="select-button">Check In Now</a>
         `;
-        console.log(`Appending check-in booking card ${index + 1}:`, card.outerHTML);
         checkinGrid.appendChild(card);
       });
-      console.log('Check-in bookings grid after render:', checkinGrid.innerHTML);
     }
 
-    // All bookings for management
-    console.log('Processing bookings for management section');
     if (bookings.length === 0) {
-      console.log('No bookings to manage');
       noManageFlightsMessage.style.display = 'block';
     } else {
-      console.log(`Rendering ${bookings.length} bookings for management`);
-      bookings.forEach((booking, index) => {
+      bookings.forEach((booking) => {
         const flight = booking.flight || { id: 'N/A', from: 'Unknown', to: 'Unknown', departure: 'N/A', aircraft: 'N/A' };
         const departureTime = new Date(flight.departure);
         const now = new Date();
@@ -134,12 +124,9 @@ async function loadBookings() {
           <p><strong>Confirmation:</strong> ${booking.confirmationNumber}</p>
           ${canCancel ? `<button class="cancel-button" data-booking-id="${booking.id}">Cancel Booking</button>` : '<p class="no-data">Flight has departed</p>'}
         `;
-        console.log(`Appending manage booking card ${index + 1}:`, card.outerHTML);
         manageGrid.appendChild(card);
       });
-      console.log('Manage bookings grid after render:', manageGrid.innerHTML);
 
-      // Attach cancel event listeners
       document.querySelectorAll('.cancel-button').forEach(button => {
         button.addEventListener('click', async (e) => {
           const bookingId = e.target.getAttribute('data-booking-id');
@@ -161,31 +148,16 @@ async function loadBookings() {
                   credentials: 'include'
                 });
                 if (response.ok) {
-                  Swal.fire({
-                    title: 'Booking Canceled',
-                    text: 'Your booking has been canceled successfully.',
-                    icon: 'success',
-                    confirmButtonColor: '#1e40af'
-                  }).then(() => {
-                    loadBookings(); // Refresh the bookings
+                  Swal.fire('Booking Canceled', 'Your booking has been canceled successfully.', 'success').then(() => {
+                    loadBookings();
                   });
                 } else {
                   const data = await response.json();
-                  Swal.fire({
-                    title: 'Error',
-                    text: data.error || 'Failed to cancel booking.',
-                    icon: 'error',
-                    confirmButtonColor: '#1e40af'
-                  });
+                  Swal.fire('Error', data.error || 'Failed to cancel booking.', 'error');
                 }
               } catch (error) {
                 console.error('Error canceling booking:', error);
-                Swal.fire({
-                  title: 'Error',
-                  text: 'Failed to cancel booking. Please try again.',
-                  icon: 'error',
-                  confirmButtonColor: '#1e40af'
-                });
+                Swal.fire('Error', 'Failed to cancel booking. Please try again.', 'error');
               }
             }
           });
@@ -207,9 +179,7 @@ async function loadBookings() {
 async function loadRewardsPoints() {
   try {
     const response = await fetch(`${BACKEND_URL}/rewards`, { credentials: 'include' });
-    if (!response.ok) {
-      throw new Error('Failed to fetch rewards points');
-    }
+    if (!response.ok) throw new Error('Failed to fetch rewards points');
     const data = await response.json();
     document.getElementById('rewards-points').textContent = data.points.toLocaleString();
   } catch (error) {
@@ -218,12 +188,62 @@ async function loadRewardsPoints() {
   }
 }
 
+async function checkDiscordLink() {
+  try {
+    const response = await fetch(`${BACKEND_URL}/linked/${(await checkAuth())?.user?.id}`, { credentials: 'include' });
+    const data = await response.json();
+    const linkedDiv = document.getElementById('discord-linked');
+    const linkForm = document.getElementById('discord-link-form');
+    if (data.linked) {
+      linkedDiv.style.display = 'block';
+      linkForm.style.display = 'none';
+    } else {
+      linkedDiv.style.display = 'none';
+      linkForm.style.display = 'block';
+    }
+  } catch (error) {
+    console.error('Error checking Discord link:', error);
+    document.getElementById('discord-link-form').style.display = 'block';
+  }
+}
+
+async function linkDiscord() {
+  const linkingCode = document.getElementById('linking-code').value.trim();
+  if (!linkingCode) {
+    Swal.fire('Error', 'Please enter a linking code.', 'error');
+    return;
+  }
+
+  try {
+    const response = await fetch(`${BACKEND_URL}/linkdiscord/verify`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ linkingCode }),
+      credentials: 'include'
+    });
+    const data = await response.json();
+
+    if (data.redirect) {
+      window.location.href = data.redirect; // Redirect to Discord OAuth
+    } else if (data.message) {
+      Swal.fire('Success', data.message, 'success').then(() => {
+        checkDiscordLink(); // Refresh link status
+      });
+    } else {
+      Swal.fire('Error', data.error || 'Failed to link Discord.', 'error');
+    }
+  } catch (error) {
+    console.error('Error linking Discord:', error);
+    Swal.fire('Error', 'Failed to link Discord. Please try again.', 'error');
+  }
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
   console.log('DOM loaded, checking auth');
   const userData = await checkAuth();
   if (userData) {
     console.log('User authenticated, loading dashboard data');
-    await Promise.all([loadBookings(), loadRewardsPoints()]);
+    await Promise.all([loadBookings(), loadRewardsPoints(), checkDiscordLink()]);
 
     document.getElementById('login-link').addEventListener('click', (e) => {
       e.preventDefault();
@@ -237,24 +257,16 @@ document.addEventListener('DOMContentLoaded', async () => {
       try {
         const response = await fetch(`${BACKEND_URL}/auth/logout`, { credentials: 'include' });
         if (response.ok) {
-          Swal.fire({
-            title: 'Logged Out',
-            text: 'You have been logged out successfully.',
-            icon: 'success',
-            confirmButtonColor: '#1e40af'
-          }).then(() => {
+          Swal.fire('Logged Out', 'You have been logged out successfully.', 'success').then(() => {
             window.location.href = '/index.html';
           });
         }
       } catch (error) {
         console.error('Error logging out:', error);
-        Swal.fire({
-          title: 'Error',
-          text: 'Failed to log out. Please try again.',
-          icon: 'error',
-          confirmButtonColor: '#1e40af'
-        });
+        Swal.fire('Error', 'Failed to log out. Please try again.', 'error');
       }
     });
+
+    document.getElementById('link-discord-btn').addEventListener('click', linkDiscord);
   }
 });

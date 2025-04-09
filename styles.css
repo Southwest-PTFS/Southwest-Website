@@ -161,7 +161,6 @@ body {
   border-radius: 6px;
 }
 
-
 .dropdown-content a:hover {
   background-color: #3b82f6;
   color: #fbbf24;
@@ -170,7 +169,6 @@ body {
 .dropdown:hover .dropdown-content {
   display: inline-block;
 }
-
 
 /* Responsive Navbar */
 @media (max-width: 768px) {
@@ -538,7 +536,6 @@ body {
   color: #444;
 }
 
-
 /* Detail Section (ourmission.html) */
 .detail-section {
   padding: 40px 0;
@@ -688,14 +685,16 @@ body {
 /* User Profile */
 .user-profile {
   margin-bottom: 30px;
+  display: flex; /* Match JS toggle to 'flex' */
+  align-items: center;
+  gap: 15px;
 }
 
 .user-avatar {
-  width: 100px;
-  height: 100px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
-  border: 3px solid #1e40af;
-  margin-bottom: 10px;
+  border: 2px solid #fbbf24;
 }
 
 .user-profile p {
@@ -751,27 +750,40 @@ body {
   line-height: 1.6;
   margin-bottom: 10px;
 }
+
+.booking-card p strong {
+  color: #1e40af; /* Emphasize labels in JS-generated cards */
+}
+
 /* User Dropdown */
 .user-dropdown {
   position: relative;
-  display: inline-block;
+  display: inline-flex; /* Changed to inline-flex to match JS toggle */
+  align-items: center;
+  gap: 8px; /* Space between PFP and username */
 }
 
-.user-dropdown .username {
-  color: #fff;
-  font-family: 'Southwest Sans Bold', sans-serif;
-  font-size: 1rem;
-  cursor: pointer;
+.user-pfp {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%; /* Circular PFP */
+  object-fit: cover;
+  border: 2px solid #1e40af; /* Optional: border to match theme */
 }
 
-.user-dropdown .dropdown-content {
+.username {
+  color: #fff; /* Adjust based on your navbar color */
+  font-weight: bold;
+}
+
+.dropdown-content {
   display: none;
   position: absolute;
+  top: 100%;
   right: 0;
   background-color: #fff;
-  min-width: 150px;
+  min-width: 160px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  border-radius: 8px;
   z-index: 1;
 }
 
@@ -779,18 +791,19 @@ body {
   display: block;
 }
 
-.user-dropdown .dropdown-content a {
+.about-dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.dropdown-content a {
   color: #1e40af;
   padding: 12px 16px;
   text-decoration: none;
   display: block;
-  font-family: 'Southwest Sans', sans-serif;
-  font-size: 0.9rem;
 }
 
-.user-dropdown .dropdown-content a:hover {
-  background-color: #f3f4f6;
-  border-radius: 8px;
+.dropdown-content a:hover {
+  background-color: #f1f1f1;
 }
 /* Bookings Section */
 .bookings-section {
@@ -845,13 +858,17 @@ body {
   padding: 60px 0;
   background-color: #fff;
   min-height: calc(100vh - 150px); /* Adjust for navbar and footer */
+  display: grid; /* Change to grid layout */
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive grid columns */
+  gap: 20px; /* Space between grid items */
 }
 
 .dashboard-header {
+  grid-column: 1 / -1; /* Span the full width of the grid */
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 40px;
+  margin-bottom: 20px;
   flex-wrap: wrap;
   gap: 20px;
 }
@@ -884,7 +901,6 @@ body {
   background-color: #f3f4f6;
   border-radius: 15px;
   padding: 30px;
-  margin-bottom: 30px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease;
 }
@@ -991,8 +1007,6 @@ body {
   z-index: 1;
 }
 
-
-
 .user-dropdown:hover .dropdown-content {
   display: block;
 }
@@ -1018,15 +1032,17 @@ body {
   background-color: #d33;
   color: white;
   border: none;
-  padding: 8px 16px;
-  border-radius: 5px;
+  padding: 10px 20px;
+  border-radius: 20px;
   cursor: pointer;
   margin-top: 10px;
-  transition: background-color 0.3s ease;
+  font-family: 'Southwest Sans Bold', sans-serif;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .cancel-button:hover {
   background-color: #b00;
+  transform: scale(1.05);
 }
 
 .booking-card .no-data {
@@ -1041,22 +1057,51 @@ body {
 }
 
 #linking-code {
-  padding: 8px;
+  padding: 10px;
   margin-right: 10px;
   border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: 5px;
   width: 200px;
+  transition: border-color 0.3s ease;
 }
 
-.select-button {
-  padding: 8px 16px;
+#linking-code:focus {
+  border-color: #1e40af;
+  outline: none;
+}
+
+#link-discord-btn {
+  padding: 10px 25px;
   background-color: #1e40af;
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 20px;
+  font-family: 'Southwest Sans Bold', sans-serif;
   cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#link-discord-btn:hover {
+  background-color: #3b82f6;
+  transform: scale(1.05);
+}
+
+#discord-linked {
+  color: #1e40af;
+  font-size: 1.1rem;
+}
+
+.select-button {
+  padding: 10px 25px;
+  background-color: #1e40af;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .select-button:hover {
-  background-color: #fbbf24;
+  background-color: #3b82f6;
+  transform: scale(1.05);
 }

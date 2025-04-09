@@ -41,26 +41,19 @@ async function checkAuth() {
 }
 
 async function loadBookings() {
-  const checkinGrid = document.getElementById('checkin-flights-grid');
-  const noCheckinFlightsMessage = document.getElementById('no-flights');
-  const loadingCheckinFlights = document.getElementById('loading-flights');
-  const manageGrid = document.getElementById('manage-flights-grid');
-  const noManageFlightsMessage = document.getElementById('no-manage-flights');
-  const loadingManageFlights = document.getElementById('loading-manage-flights');
+  const myFlightsGrid = document.getElementById('my-flights-grid');
+  const noMyFlightsMessage = document.getElementById('no-my-flights');
+  const loadingMyFlights = document.getElementById('loading-my-flights');
 
-  if (!checkinGrid || !noCheckinFlightsMessage || !loadingCheckinFlights || 
-      !manageGrid || !noManageFlightsMessage || !loadingManageFlights) {
+  if (!myFlightsGrid || !noMyFlightsMessage || !loadingMyFlights) {
     console.error('Required elements for loadBookings not found');
     return;
   }
 
   console.log('Fetching bookings from:', `${BACKEND_URL}/bookings`);
-  loadingCheckinFlights.style.display = 'block';
-  loadingManageFlights.style.display = 'block';
-  checkinGrid.innerHTML = '';
-  manageGrid.innerHTML = '';
-  noCheckinFlightsMessage.style.display = 'none';
-  noManageFlightsMessage.style.display = 'none';
+  loadingMyFlights.style.display = 'block';
+  myFlightsGrid.innerHTML = '';
+  noMyFlightsMessage.style.display = 'none';
 
   try {
     const bookingsResponse = await fetch(`${BACKEND_URL}/bookings`, { 
@@ -75,42 +68,15 @@ async function loadBookings() {
     const bookings = await bookingsResponse.json();
     console.log('Raw bookings response:', bookings);
 
-    const checkinReadyBookings = bookings.filter(booking => {
-      const departureTime = new Date(booking.flight.departure);
-      const now = new Date();
-      const timeDiff = departureTime - now;
-      return timeDiff > 0 && !booking.boardingPosition;
-    });
-    console.log('Check-in ready bookings:', checkinReadyBookings);
-
-    if (checkinReadyBookings.length === 0) {
-      noCheckinFlightsMessage.style.display = 'block';
-    } else {
-      checkinReadyBookings.forEach((booking) => {
-        const flight = booking.flight || { id: 'N/A', from: 'Unknown', to: 'Unknown', departure: 'N/A', aircraft: 'N/A' };
-        const card = document.createElement('div');
-        card.className = 'booking-card';
-        card.innerHTML = `
-          <h3 class="font-swabold">Flight #${flight.id}</h3>
-          <p><strong>From:</strong> ${flight.from}</p>
-          <p><strong>To:</strong> ${flight.to}</p>
-          <p><strong>Departure:</strong> ${new Date(flight.departure).toLocaleString()}</p>
-          <p><strong>Aircraft:</strong> ${flight.aircraft}</p>
-          <p><strong>Confirmation:</strong> ${booking.confirmationNumber}</p>
-          <a href="/checkin.html?confirmationNumber=${booking.confirmationNumber}" class="select-button">Check In Now</a>
-        `;
-        checkinGrid.appendChild(card);
-      });
-    }
-
     if (bookings.length === 0) {
-      noManageFlightsMessage.style.display = 'block';
+      noMyFlightsMessage.style.display = 'block';
     } else {
       bookings.forEach((booking) => {
         const flight = booking.flight || { id: 'N/A', from: 'Unknown', to: 'Unknown', departure: 'N/A', aircraft: 'N/A' };
         const departureTime = new Date(flight.departure);
         const now = new Date();
         const timeDiff = departureTime - now;
+        const canCheckIn = timeDiff > 0 && !booking.boardingPosition;
         const canCancel = timeDiff > 0;
 
         const card = document.createElement('div');
@@ -122,9 +88,11 @@ async function loadBookings() {
           <p><strong>Departure:</strong> ${new Date(flight.departure).toLocaleString()}</p>
           <p><strong>Aircraft:</strong> ${flight.aircraft}</p>
           <p><strong>Confirmation:</strong> ${booking.confirmationNumber}</p>
-          ${canCancel ? `<button class="cancel-button" data-booking-id="${booking.id}">Cancel Booking</button>` : '<p class="no-data">Flight has departed</p>'}
+          ${canCheckIn ? `<a href="/checkin.html?confirmationNumber=${booking.confirmationNumber}" class="select-button">Check In Now</a>` : ''}
+          ${canCancel ? `<button class="cancel-button" data-booking-id="${booking.id}" style="margin-top: ${canCheckIn ? '10px' : '0'};">Cancel Booking</button>` : ''}
+          ${!canCheckIn && !canCancel ? '<p class="no-data">Flight has departed</p>' : ''}
         `;
-        manageGrid.appendChild(card);
+        myFlightsGrid.appendChild(card);
       });
 
       document.querySelectorAll('.cancel-button').forEach(button => {
@@ -166,13 +134,10 @@ async function loadBookings() {
     }
   } catch (error) {
     console.error('Error fetching bookings:', error.message);
-    noCheckinFlightsMessage.textContent = `Error loading flights: ${error.message}. Please try again later.`;
-    noCheckinFlightsMessage.style.display = 'block';
-    noManageFlightsMessage.textContent = `Error loading bookings: ${error.message}. Please try again later.`;
-    noManageFlightsMessage.style.display = 'block';
+    noMyFlightsMessage.textContent = `Error loading flights: ${error.message}. Please try again later.`;
+    noMyFlightsMessage.style.display = 'block';
   } finally {
-    loadingCheckinFlights.style.display = 'none';
-    loadingManageFlights.style.display = 'none';
+    loadingMyFlights.style.display = 'none';
   }
 }
 
@@ -218,7 +183,6 @@ async function checkDiscordLink() {
     }
   } catch (error) {
     console.error('Error checking Discord link:', error);
-    // Default to showing the form if there's an error
     document.getElementById('discord-linked').style.display = 'none';
     document.getElementById('discord-link-form').style.display = 'block';
   }

@@ -59,7 +59,6 @@
     </div>
   </header>
 
-
   <section class="dashboard-section">
     <div class="container">
       <div class="dashboard-header">
@@ -83,25 +82,15 @@
         </div>
       </div>
 
-      <!-- Flights Available to Check In -->
-      <div class="dashboard-card bookings-section">
-        <h2 class="font-swabold">Flights Available to Check In</h2>
-        <div id="loading-flights" class="loading" style="display: none;">
+      <!-- My Flights Section (Merged) -->
+      <div class="dashboard-card my-flights-section">
+        <h2 class="font-swabold">My Flights</h2>
+        <p>Check in for upcoming flights or manage your bookings below. To book a new flight, <a href="/book.html">click here</a>.</p>
+        <div id="loading-my-flights" class="loading" style="display: none;">
           <div class="heart-spinner"></div>
         </div>
-        <div class="bookings-grid" id="checkin-flights-grid"></div>
-        <p id="no-flights" class="no-data" style="display: none;">No flights available to check in at this time.</p>
-      </div>
-
-      <!-- Manage Bookings -->
-      <div class="dashboard-card manage-bookings-section">
-        <h2 class="font-swabold">Manage Bookings</h2>
-        <p>View or cancel your bookings below. To book a new flight, <a href="/book.html">click here</a>.</p>
-        <div id="loading-manage-flights" class="loading" style="display: none;">
-          <div class="heart-spinner"></div>
-        </div>
-        <div class="bookings-grid" id="manage-flights-grid"></div>
-        <p id="no-manage-flights" class="no-data" style="display: none;">You have no bookings to manage.</p>
+        <div class="bookings-grid" id="my-flights-grid"></div>
+        <p id="no-my-flights" class="no-data" style="display: none;">You have no flights to manage or check in for at this time.</p>
       </div>
 
       <!-- Rapid Rewards Points -->
@@ -121,3 +110,5 @@
 
   <script src="/scripts/auth.js"></script>
   <script src="/scripts/dashboard.js"></script>
+</body>
+</html>
